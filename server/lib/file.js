@@ -21,8 +21,8 @@
   }
 
   //Make directory for logger
-  function mkdir(protocol, port, logpath) {
-    mkdirp(path.join(logpath, protocol, port));
+  function mkdir(logpath) {
+    mkdirp(path.resolve(logpath));
   }
 
   function writeData(dirname, data) {

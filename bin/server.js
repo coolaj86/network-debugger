@@ -24,7 +24,7 @@
   }
 
   if (require.main === module) {
-    app = init(process.argv[3] || (path.join(process.cwd(), 'netbug-logs')));
+    app = init(process.argv[3] || path.resolve('netbug-logs'));
     run();
   }
 }());
