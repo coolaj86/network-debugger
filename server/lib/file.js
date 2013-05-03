@@ -33,6 +33,12 @@
     if (data.indexOf("<kml") !== -1) {
       ext = '.kml';
     }
+    else if (data.indexOf("<html") !== -1) {
+      ext = '.html';
+    }
+    else if (data.indexOf("<xml") !== -1) {
+      ext = '.xml';
+    }
     else {
       try {
         JSON.parse(data);
