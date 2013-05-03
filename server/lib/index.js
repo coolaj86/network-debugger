@@ -8,7 +8,8 @@
   var connect = require('steve')
     , socket = require('socket.io')
     , listenerControl = {
-          http: require('./httpServer')
+          https: require('./httpsServer')
+        , http: require('./httpServer')
         , tcp:  require('./tcpServer')
         , udp:  require('./udpServer')
       }

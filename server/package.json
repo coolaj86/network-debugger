@@ -18,6 +18,7 @@
     "steve": "0.5.x",
     "connect": "2.3.6",
     "connect_router": "1.x",
+    "join": "2.x",
     "socket.io": "*",
     "mkdirp": "*"
   },
