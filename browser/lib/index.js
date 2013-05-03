@@ -1,4 +1,4 @@
-/*jshint strict:true node:true es5:true onevar:true laxcomma:true laxbreak:true devel:true*/
+/*jshint strict:true, browser:true, es5:true, onevar:true, laxcomma:true, laxbreak:true*/
 /*
  * BROWSER
  */
