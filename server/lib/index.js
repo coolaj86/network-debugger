@@ -19,6 +19,7 @@
 
   function init(logPath) {
     var app
+      , server
       , centralEmitter = {}
       , websocketServer
       , connectedSockets = []
@@ -47,36 +48,6 @@
     };
     Object.keys(listenerControl).forEach(function (protocol) {
       listenerControl[protocol].assignSocket(centralEmitter);
-    });
-
-    websocketServer = socket.listen(0);
-    websocketServer.set('log level', 1);
-    websocketServer.sockets.on('connection', function (socket) {
-      connectedSockets.push(socket);
-
-      console.log('Browser socket connected (count = ' + connectedSockets.length + ')');
-      socket.on('disconnect', function () {
-        var index = connectedSockets.indexOf(socket)
-          ;
-        if (index >= 0) {
-          connectedSockets.splice(index, 1);
-          console.log('Browser socket disconnected (count = ' + connectedSockets.length + ')');
-        }
-        else {
-          console.error('Received disconnect event from unlisted browser socket');
-        }
-      });
-      socket.on('close', function () {
-        var index = connectedSockets.indexOf(socket)
-          ;
-        if (index >= 0) {
-          connectedSockets.splice(index, 1);
-          console.log('Browser socket closed (count = ' + connectedSockets.length + ')');
-        }
-        else {
-          console.error('Received close event from unlisted browser socket');
-        }
-      });
     });
 
     function onPageLoad(request, response){
@@ -222,7 +193,39 @@
     app.use(connect['static'](__dirname + '/../../webclient-deployed'));
     app.use(connect.router(router));
 
-    return app;
+    server = require('http').createServer(app);
+
+    websocketServer = socket.listen(server);
+    websocketServer.set('log level', 1);
+    websocketServer.sockets.on('connection', function (socket) {
+      connectedSockets.push(socket);
+
+      console.log('Browser socket connected (count = ' + connectedSockets.length + ')');
+      socket.on('disconnect', function () {
+        var index = connectedSockets.indexOf(socket)
+          ;
+        if (index >= 0) {
+          connectedSockets.splice(index, 1);
+          console.log('Browser socket disconnected (count = ' + connectedSockets.length + ')');
+        }
+        else {
+          console.error('Received disconnect event from unlisted browser socket');
+        }
+      });
+      socket.on('close', function () {
+        var index = connectedSockets.indexOf(socket)
+          ;
+        if (index >= 0) {
+          connectedSockets.splice(index, 1);
+          console.log('Browser socket closed (count = ' + connectedSockets.length + ')');
+        }
+        else {
+          console.error('Received close event from unlisted browser socket');
+        }
+      });
+    });
+
+    return server;
   }
 
   module.exports.init = init;
