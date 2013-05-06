@@ -17,8 +17,8 @@
 
     parser = new ArgumentParser({
       version: require('../package.json').version,
-      addHelp: true,
-      description: 'Network listening tool'
+      description: require('../package.json').description,
+      addHelp: true
     });
 
     parser.addArgument(

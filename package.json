@@ -1,7 +1,7 @@
 {
   "author": "Kyle Weller <kywe665@gmail.com>",
   "name": "netbug",
-  "description": "Network Debugger",
+  "description": "Unified interface for creating listeners for various network protocols",
   "version": "2.0.1",
   "repository": {
     "type": "git",
