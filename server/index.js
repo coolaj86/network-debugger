@@ -8,10 +8,10 @@
   var connect = require('steve')
     , socket = require('socket.io')
     , listenerControl = {
-          https: require('./httpsServer')
-        , http: require('./httpServer')
-        , tcp:  require('./tcpServer')
-        , udp:  require('./udpServer')
+          https: require('./lib/httpsServer')
+        , http:  require('./lib/httpServer')
+        , tcp:   require('./lib/tcpServer')
+        , udp:   require('./lib/udpServer')
       }
     , initialized = false
     ;
@@ -191,7 +191,7 @@
     app.use(connect.json());
     app.use(connect.urlencoded());
     app.use(connect.favicon());
-    app.use(connect['static'](__dirname + '/../../webclient-deployed'));
+    app.use(connect['static'](__dirname + '/../webclient-deployed'));
     app.use(connect.router(router));
 
     server = require('http').createServer(app);
