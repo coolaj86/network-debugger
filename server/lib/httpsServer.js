@@ -83,18 +83,31 @@
       callback = printErr;
     }
 
+    function validateConnList() {
+      function countRetrieved(err, count) {
+        if (err) {
+          return callbackWrapper(err);
+        }
+
+        if (connections.length !== count) {
+          callbackWrapper('connection counts out of sync: nodejs count:', count, 'netbug count:', connections.length);
+        }
+      }
+
+      server.getConnections(countRetrieved);
+    }
+
     function listenOnServer() {
       server.on('error', callbackWrapper);
 
       server.on('connection', function (socket) {
         connections.push(socket);
-        if (connections.length !== server.connections) {
-          callbackWrapper('connections list out of sync: expected', server.connections, 'found', connections.length);
-        }
+        validateConnList();
+
         browserSocket.emit('connectionChange', {
             protocol: 'https'
           , port: port
-          , count: server.connections
+        , count: connections.length
         });
 
         socket.on('close', function () {
@@ -106,13 +119,12 @@
           else {
             connections.splice(index, 1);
           }
-          if (connections.length !== server.connections) {
-            callbackWrapper('connections list out of sync: expected', server.connections, 'found', connections.length);
-          }
+          validateConnList();
+
           browserSocket.emit('connectionChange', {
               protocol: 'https'
             , port: port
-            , count: server.connections
+          , count: connections.length
           });
         });
       });
@@ -203,6 +215,13 @@
 
         callbackWrapper(error);
       });
+
+      // backwarde compatibility for node < 0.10
+      if (typeof server.getConnections !== 'function') {
+        server.getConnections = function (cb) {
+          cb(null, server.connections);
+        };
+      }
 
       server.listen(port);
     }
