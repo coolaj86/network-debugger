@@ -16,11 +16,15 @@ Network Debugging tool. Monitor Http, Tcp, and Udp traffic on your network. Save
 
 ## Run from terminal
 
-    netbug-server <port> <log-directory>
+    netbug-server -p <port> -l <log-directory>
     
 ex:
 
-    netbug-server 1234 ./logs
+    netbug-server -p 1234 -l ./logs
+
+Use --help for a full list of options
+
+    netbug-server --help
 
 ####Now open your browser to http://localhost:1234
 
