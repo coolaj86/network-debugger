@@ -12,15 +12,16 @@
     "test": "run-tests"
   },
   "browserDependencies": {
-    "ahr2": "2.x",
-    "bonzo": "1.x",
-    "qwery": "3.x",
-    "reqwest": "*",
     "bean": "0.4.x",
+    "bonzo": "1.x",
     "domready": "0.2.x",
-    "url": "*",
-    "socket.io-browser": "*",
-    "pretty-data": "*"
+    "qwery": "3.x",
+
+    "reqwest": "0.6.x",
+    "pretty-data": "0.30.x",
+    "hljs": "6.x",
+    "url": "0.7.x",
+    "socket.io-browser": "0.8.x"
   },
   "dependencies": {},
   "devDependencies": {},

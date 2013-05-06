@@ -5,10 +5,6 @@ DEV_MODE=${DEV_MODE}
 set -e
 set -u
 
-pushd server
-  npm install
-popd
-
 pushd browser
   WEBPUB='../public'
   rm -rf "${WEBPUB}"
