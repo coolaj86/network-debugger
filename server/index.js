@@ -5,8 +5,9 @@
 (function () {
   "use strict";
 
-  var connect = require('steve')
+  var connect = require('connect')
     , socket = require('socket.io')
+    , app = require('./steve')
     , listenerControl = {
           https: require('./lib/httpsServer')
         , http:  require('./lib/httpServer')
@@ -16,11 +17,8 @@
     , initialized = false
     ;
 
-  connect.router = require('connect_router');
-
   function init(logPath) {
-    var app
-      , server
+    var server
       , centralEmitter = {}
       , websocketServer
       , connectedSockets = []
@@ -187,13 +185,7 @@
       rest.del('/listeners/:protocol/:portNum', stopListening);
     }
 
-    app = connect.createServer();
-    app.use(connect.json());
-    app.use(connect.urlencoded());
-    app.use(connect.favicon());
-    app.use(connect['static'](__dirname + '/../public'));
     app.use(connect.router(router));
-
     server = require('http').createServer(app);
 
     websocketServer = socket.listen(server);

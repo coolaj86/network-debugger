@@ -17,11 +17,17 @@
     "prepublish": "bash deploy.sh"
   },
   "dependencies": {
+    "connect": "2.x",
+    "http-json": "1.x",
+    "connect_router": "1.x",
+    "nowww": "1.x",
+    "connect-pathname": "1.x",
+    "connect-xcors": "0.5.x",
+    "express-chromeframe": "0.2.x",
+
     "argparse": "0.1.x",
     "colors": "0.6.x",
-    "steve": "0.5.x",
     "socket.io": "0.9.x",
-    "connect_router": "1.x",
     "mkdirp": "0.3.x",
     "join": "2.x"
   },
