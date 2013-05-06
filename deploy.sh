@@ -1,20 +1,19 @@
 #!/usr/bin/env bash
 
-#npm install -g jade less pakmanager
+DEV_MODE=${DEV_MODE}
+
+set -e
+set -u
 
 pushd server
   npm install
 popd
 
-#pushd local
-#  npm install
-#popd
-
 pushd browser
-  WEBPUB='../webclient-deployed'
+  WEBPUB='../public'
   rm -rf "${WEBPUB}"
   mkdir -p "${WEBPUB}/"
-  
+
   rsync -a static/ "${WEBPUB}/"
 
   jade index.jade
@@ -24,10 +23,9 @@ pushd browser
   mv style.css "${WEBPUB}/"
 
   pakmanager build
-  rm pakmanaged.html
+  rm -f pakmanaged.html
   uglifyjs pakmanaged.js > pakmanaged.min.js
+  [ -z ${DEV_MODE} ] || cp pakmanaged.min.js pakmanaged.js
   mv pakmanaged.* "${WEBPUB}"
 popd
 
-#pushd clients
-#popd

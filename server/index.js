@@ -191,7 +191,7 @@
     app.use(connect.json());
     app.use(connect.urlencoded());
     app.use(connect.favicon());
-    app.use(connect['static'](__dirname + '/../webclient-deployed'));
+    app.use(connect['static'](__dirname + '/../public'));
     app.use(connect.router(router));
 
     server = require('http').createServer(app);
