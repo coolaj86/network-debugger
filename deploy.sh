@@ -20,8 +20,10 @@ pushd browser
 
   pakmanager build
   rm -f pakmanaged.html
-  uglifyjs pakmanaged.js > pakmanaged.min.js
-  [ -z ${DEV_MODE} ] || cp pakmanaged.min.js pakmanaged.js
-  mv pakmanaged.* "${WEBPUB}"
+  if [ -z ${DEV_MODE} ]; then
+    uglifyjs pakmanaged.js > pakmanaged.min.js
+    mv pakmanaged.min.js pakmanaged.js
+  fi
+  mv pakmanaged.js "${WEBPUB}"
 popd
 
