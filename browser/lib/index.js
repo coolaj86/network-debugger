@@ -229,10 +229,10 @@
   }
 
   //EVENT LISTENERS ALL
-  $('.container').on('.js-all-stream pre', 'click', function () {
+  $('.container').delegate('.js-all-stream pre', 'click', function () {
     $(this).toggleClass('css-hl-block');
   });
-  $('.container').on('.js-ui-tab-view:not(.css-active) .js-openSocket', 'click', function () {
+  $('.container').delegate('.js-ui-tab-view:not(.css-active) .js-openSocket', 'click', function () {
     var protocol = $(this).attr('data-protocol')
       , port = Number($('.js-portNum.js-'+protocol).val())
       , options
@@ -248,10 +248,10 @@
     }
     openListener(protocol, port);
   });
-  $('.container').on('.js-ui-tab-view:not(.css-active) .js-reopen', 'click', function () {
+  $('.container').delegate('.js-ui-tab-view:not(.css-active) .js-reopen', 'click', function () {
     openListener($(this).attr('data-protocol'), $(this).attr('data-port'));
   });
-  $('.container').on('.js-ui-tab-view .js-close-tab', 'click', function () {
+  $('.container').delegate('.js-ui-tab-view .js-close-tab', 'click', function () {
    var protocol = $(this).parent().attr('data-protocol')
       , port = $(this).parent().find('a').html()
       , listenerOpen
@@ -264,18 +264,18 @@
 
     tabs.closeTab(protocol, port, this);
   });
-  $('.container').on('.js-ui-tab-view:not(.css-active) .js-portNum', 'keypress', function (e) {
+  $('.container').delegate('.js-ui-tab-view:not(.css-active) .js-portNum', 'keypress', function (e) {
     if (e.keyCode === 13) {
       $('.js-openSocket.js-'+$(this).attr('data-protocol')).trigger('click');
     }
   });
-  $('.container').on('.js-scroll', 'change', function () {
+  $('.container').delegate('.js-scroll', 'change', function () {
     scrollLock($(this).attr('data-protocol'), $(this).closest('.js-ui-tab-view').attr('data-name'));
   });
-  $('.container').on('.js-clear', 'click', function () {
+  $('.container').delegate('.js-clear', 'click', function () {
     $(this).closest('.js-ui-tab-view').find('.js-'+$(this).attr('data-protocol')+'-stream').html('');
   });
-  $('.container').on('.js-ui-tab-view:not(.css-inactive) .js-log', 'click', function () {
+  $('.container').delegate('.js-ui-tab-view:not(.css-inactive) .js-log', 'click', function () {
     var protocol = $(this).attr('data-protocol')
       , port = $(this).closest('.js-ui-tab-view').attr('data-name')
       , curState = $(this).hasClass('activeLog')
@@ -283,7 +283,7 @@
 
     setListenerLogging(protocol, port, {logData: !curState});
   });
-  $('.container').on('.js-ui-tab-view:not(.css-inactive) .js-separate-files', 'click', function () {
+  $('.container').delegate('.js-ui-tab-view:not(.css-inactive) .js-separate-files', 'click', function () {
     var protocol = $(this).attr('data-protocol')
       , port = $(this).closest('.js-ui-tab-view').attr('data-name')
       , curState = $(this).attr('checked')
@@ -292,7 +292,7 @@
     // for the check boxes the state changes to was the user wants before we get the event
     setListenerLogging(protocol, port, {separateFiles: curState});
   });
-  $('.container').on('.js-ui-tab-view:not(.css-inactive) .js-include-headers', 'click', function () {
+  $('.container').delegate('.js-ui-tab-view:not(.css-inactive) .js-include-headers', 'click', function () {
     var protocol = $(this).attr('data-protocol')
       , port = $(this).closest('.js-ui-tab-view').attr('data-name')
       , curState = $(this).attr('checked')
@@ -301,7 +301,7 @@
     // for the check boxes the state changes to was the user wants before we get the event
     setListenerLogging(protocol, port, {includeHeaders: curState});
   });
-  $('.container').on('.js-ui-tab-view:not(.css-inactive) .js-closeSocket', 'click', function () {
+  $('.container').delegate('.js-ui-tab-view:not(.css-inactive) .js-closeSocket', 'click', function () {
     var protocol = $(this).attr('data-protocol')
       , port = $(this).closest('.js-ui-tab-view').attr('data-name')
       ;
