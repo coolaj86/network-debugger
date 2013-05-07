@@ -1,3 +1,10 @@
+--v2.1.0 May 2013
+added support for HTTPS
+added a proper argument parser
+added support for Node 0.10
+put the web socket on the same port as the UI server
+expanded list of automatic file extensions
+
 --v2.0.1 August 2012
 fixed a bug with dependencies
 

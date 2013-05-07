@@ -1,8 +1,8 @@
 {
-  "author": "Kyle Weller <kywe665@gmail.com>",
+  "author": "Seth Gibelyou <sethg@spotterrf.com>",
   "name": "netbug",
   "description": "Unified interface for creating listeners for various network protocols",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "repository": {
     "type": "git",
     "url": "git://github.com/SpotterRF/network-debugger.git"
@@ -11,7 +11,7 @@
     "netbug-server": "bin/server.js"
   },
   "publishConfig": {
-    "registry": "https://npm.spotter360.org:5984"
+    "registry": "http://npm.spotter360.org:5984"
   },
   "scripts": {
     "prepublish": "bash deploy.sh"
