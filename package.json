@@ -14,7 +14,7 @@
     "registry": "http://npm.spotter360.org:5984"
   },
   "scripts": {
-    "prepublish": "bash deploy.sh"
+    "prepublish": "grunt build"
   },
   "dependencies": {
     "connect": "2.x",
@@ -31,7 +31,15 @@
     "mkdirp": "0.3.x",
     "join": "2.x"
   },
-  "devDependencies": {},
+  "devDependencies": {
+    "grunt": "0.4.x",
+    "grunt-contrib-less": "0.5.x",
+    "grunt-contrib-copy": "0.4.x",
+    "grunt-contrib-jade": "0.5.x",
+    "grunt-contrib-watch": "0.4.x",
+    "grunt-contrib-cssmin": "0.6.x",
+    "grunt-contrib-uglify": "0.2.x"
+  },
   "optionalDependencies": {},
   "engines": {
     "node": "*"
