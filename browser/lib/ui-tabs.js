@@ -9,8 +9,8 @@
     , location = window.location
     , lvlSelectors = [
         {
-          tab: '.js-protocol-tab-template',
-          window: '.js-protocol-window-template',
+          tab: '.js-protocol-tab',
+          window: '.js-protocol-window',
           attribute: 'data-protocol'
         },
         {

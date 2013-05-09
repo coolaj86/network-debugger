@@ -75,14 +75,20 @@
 
   function injectProtocolTab(protocol) {
     var opts = {}
+      , newElement
       ;
 
     opts.protocol = protocol;
     opts.display  = protocol.toUpperCase();
     opts.href = '#/'+protocol+'/default';
 
-    $('.js-protocol-tab-bar').append(protocolTabTemplate(opts));
-    $('.container').append(protocolWindowTemplate(opts));
+    newElement = protocolTabTemplate(opts);
+    newElement = $(newElement).removeClass('js-protocol-tab-template');
+    $('.js-protocol-tab-bar').append(newElement);
+
+    newElement = protocolWindowTemplate(opts);
+    newElement = $(newElement).removeClass('js-protocol-window-template');
+    $('.container').append(newElement);
   }
 
   function injectMessage(options, data) {
