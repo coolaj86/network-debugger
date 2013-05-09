@@ -9,67 +9,25 @@ html(lang='en')
         .css-logo
           img(src='images/spotterrf-labs-white-logo.png', alt='')
         .css-title Network Debugger
-        ul.css-tab-menu.js-protocol-tab-holder
+        ul.js-protocol-tab-bar.css-tab-menu
       .css-container.container
-        .js-ui-tab-view.js-all.css-inactive(data-name='tcp')
-          .css-tab-bar.js-tab-bar
-            li.js-ui-tab.js-default.css-default.css-hidden(data-protocol="tcp")
-              a(href='#/tcp/default')  +
-          .js-ui-tab-view.css-ui-tab-view(data-name='default')
-            p.css-enter-port Enter the port to listen on and click 'Listen'
-            .css-listen-form
-              input.js-portNum.js-tcp.css-portNum(type='text')(data-protocol='tcp')
-              a.css-button.css-openSocket.js-openSocket.js-tcp(data-protocol='tcp') Listen
-            .js-tcp-stream.js-all-stream.css-stream
-              span.js-allstream-error
-            a.css-button.js-clear.js-tcp(data-protocol='tcp') Clear
-          .css-tab-container.js-tab-container
-
-        .js-ui-tab-view.js-all.css-inactive(data-name='https')
-          .css-tab-bar.js-tab-bar
-            li.js-ui-tab.js-default.css-default.css-hidden(data-protocol="https")
-              a(href='#/https/default')  +
-          .js-ui-tab-view.css-ui-tab-view(data-name='default')
-            p.css-enter-port Enter the port to listen on and click 'Listen'
-            .css-listen-form
-              input.js-portNum.js-https.css-portNum(type='text')(data-protocol='https')
-              a.css-button.css-openSocket.js-openSocket.js-https(data-protocol='https') Listen
-            .js-https-stream.js-all-stream.css-stream
-              span.js-allstream-error
-            a.css-button.js-clear.js-https(data-protocol='https') Clear
-          .css-tab-container.js-tab-container
-
-        .js-ui-tab-view.js-all.css-inactive(data-name='http')
-          .css-tab-bar.js-tab-bar
-            li.js-ui-tab.js-default.css-default.css-hidden(data-protocol="http")
-              a(href='#/http/default')  +
-          .js-ui-tab-view.css-ui-tab-view(data-name='default')
-            p.css-enter-port Enter the port to listen on and click 'Listen'
-            .css-listen-form
-              input.js-portNum.js-http.css-portNum(type='text')(data-protocol='http')
-              a.css-button.css-openSocket.js-openSocket.js-http(data-protocol='http') Listen
-            .js-http-stream.js-all-stream.css-stream
-              span.js-allstream-error
-            a.css-button.js-clear.js-http(data-protocol='http') Clear
-          .css-tab-container.js-tab-container
-
-        .js-ui-tab-view.js-all.css-inactive(data-name='udp')
-          .css-tab-bar.js-tab-bar
-            li.js-ui-tab.js-default.css-default.css-hidden(data-protocol="udp")
-              a(href='#/udp/default')  +
-          .js-ui-tab-view.css-ui-tab-view(data-name='default')
-            p.css-enter-port Enter the port to listen on and click 'Listen'
-            .css-listen-form
-              input.js-portNum.js-udp.css-portNum(type='text')(data-protocol='udp')
-              a.css-button.css-openSocket.js-openSocket.js-udp(data-protocol='udp') Listen
-            .js-udp-stream.js-all-stream.css-stream
-              span.js-allstream-error
-            a.css-button.js-clear.js-udp(data-protocol='udp') Clear
-          .css-tab-container.js-tab-container
 
       span.js-all-templates.css-hidden
         li.js-protocol-tab-template.js-ui-tab(data-protocol='')
           a(href='')
+        .js-protocol-window-template.css-inactive(data-protocol='')
+          .js-listener-tab-bar.css-tab-bar(data-protocol='')
+            li.js-ui-tab.js-default.css-default.css-hidden
+              a(href='')  +
+          .js-listener-container.css-ui-tab-view(data-protocol='')
+            .js-listener-window.css-tab-container(data-protocol='')(listener-name='default')
+              p.css-enter-port Enter the port to listen on
+              .js-listen-form.css-listen-form
+                input.js-portNum.css-portNum(type='text')(data-protocol='')
+                a.js-openSocket.css-button.css-openSocket(data-protocol='') Listen
+              .js-listener-stream.css-stream(data-protocol='')(listener-name='default')
+              a.css-button.js-clear(data-protocol='')(listener-name='default') Clear
+
         span.js-message-template
           span
           br

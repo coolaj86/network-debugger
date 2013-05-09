@@ -12,8 +12,8 @@
     , timestampTemplate
     , tabDir
     , tabTemplate
-    , protocolTabDir
     , protocolTabTemplate
+    , protocolWindowTemplate
     ;
 
   messageDir = {
@@ -33,12 +33,6 @@
     'a@href': 'tabLink',
     'a': 'portNum'
   };
-  protocolTabDir = {
-    '@data-name': 'protocol',
-    '@data-protocol': 'protocol',
-    'a@href': 'href',
-    'a': 'display'
-  };
   /*tabContainerDir = {
     'div.js-ui-tab-view@data-name': 'port-num',
     '.js-ui-tab-view .css-listen-form .js-port-num@class': 'class-protocol',
@@ -55,11 +49,27 @@
   };*/
 
   function compileTemplates() {
+    protocolTabTemplate = pure('.js-protocol-tab-template').compile({
+      '@data-name': 'protocol',
+      '@data-protocol': 'protocol',
+      'a@href': 'href',
+      'a': 'display'
+    });
+    protocolWindowTemplate = pure('.js-protocol-window-template').compile({
+      '@data-protocol': 'protocol',
+      'div.js-listener-tab-bar@data-protocol': 'protocol',
+      'div.js-listener-tab-bar li a@href': 'href',
+      'div.js-listener-container@data-protocol': 'protocol',
+      'div.js-listener-container div.js-listener-window@data-protocol': 'protocol',
+      'div.js-listener-container div.js-listener-window a@data-protocol': 'protocol',
+      'div.js-listener-container div.js-listener-window div.js-listen-form input@data-protocol': 'protocol',
+      'div.js-listener-container div.js-listener-window div.js-listen-form a@data-protocol': 'protocol'
+    });
+
     timestampTemplate = pure('.js-timestamp-template').compile(timestampDir);
     messageTemplate = pure('.js-message-template').compile(messageDir);
     codeTemplate = pure('.js-code-template').compile(codeDir);
     tabTemplate = pure('.js-tab-template').compile(tabDir);
-    protocolTabTemplate = pure('.js-protocol-tab-template').compile(protocolTabDir);
     //tabContainerTemplate = pure('.js-tab-container-template').compile(tabContainerDir);
   }
 
@@ -71,7 +81,8 @@
     opts.display  = protocol.toUpperCase();
     opts.href = '#/'+protocol+'/default';
 
-    $('.js-protocol-tab-holder').append(protocolTabTemplate(opts));
+    $('.js-protocol-tab-bar').append(protocolTabTemplate(opts));
+    $('.container').append(protocolWindowTemplate(opts));
   }
 
   function injectMessage(options, data) {
