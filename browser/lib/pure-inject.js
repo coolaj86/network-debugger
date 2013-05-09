@@ -10,10 +10,9 @@
     , codeTemplate
     , timestampDir
     , timestampTemplate
-    , tabDir
-    , tabTemplate
     , protocolTabTemplate
     , protocolWindowTemplate
+    , listenerTabTemplate
     ;
 
   messageDir = {
@@ -26,12 +25,6 @@
   };
   timestampDir = {
     'div': 'time'
-  };
-  tabDir = {
-    'li@class+': 'class',
-    'li@data-protocol': 'protocol',
-    'a@href': 'tabLink',
-    'a': 'portNum'
   };
   /*tabContainerDir = {
     'div.js-ui-tab-view@data-name': 'port-num',
@@ -66,10 +59,16 @@
       'div.js-listener-container div.js-listener-window div.js-listen-form a@data-protocol': 'protocol'
     });
 
+    listenerTabTemplate = pure('.js-listener-tab-template').compile({
+      'a@href': 'href',
+      'a': 'display',
+      'span@data-protocol': 'protocol',
+      'span@listener-port': 'portNum'
+    });
+
     timestampTemplate = pure('.js-timestamp-template').compile(timestampDir);
     messageTemplate = pure('.js-message-template').compile(messageDir);
     codeTemplate = pure('.js-code-template').compile(codeDir);
-    tabTemplate = pure('.js-tab-template').compile(tabDir);
     //tabContainerTemplate = pure('.js-tab-container-template').compile(tabContainerDir);
   }
 
@@ -89,6 +88,21 @@
     newElement = protocolWindowTemplate(opts);
     newElement = $(newElement).removeClass('js-protocol-window-template');
     $('.container').append(newElement);
+  }
+
+  function injectListenerTab(protocol, portNum) {
+    var opts = {}
+      , newElement
+      ;
+
+    opts.protocol = protocol;
+    opts.portNum  = portNum;
+    opts.display  = portNum;
+    opts.href = '#/'+protocol+'/'+portNum;
+
+    newElement = listenerTabTemplate(opts);
+    newElement = $(newElement).removeClass('js-listener-tab-template');
+    $('.js-listener-tab-bar[data-protocol='+protocol+']').append(newElement);
   }
 
   function injectMessage(options, data) {
@@ -128,15 +142,10 @@
   function addTime () {
     return timestampTemplate({'time': new Date().toString()});
   }
-  function injectNewTab(tab) {
-    $('.js-ui-tab-view[data-name='+tab.protocol+'] '+'.js-tab-bar').append(tabTemplate(tab));
-    //console.log(container);
-    //$('.js-ui-tab-view[data-name='+tab.protocol+'] '+'.js-tab-container').append(tabContainerTemplate(container));
-  }
 
   module.exports.compileTemplates = compileTemplates;
   module.exports.injectProtocolTab = injectProtocolTab;
   module.exports.injectCode = injectCode;
   module.exports.injectMessage = injectMessage;
-  module.exports.injectNewTab = injectNewTab;
+  module.exports.injectListenerTab = injectListenerTab;
 }());

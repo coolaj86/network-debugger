@@ -25,8 +25,12 @@ html(lang='en')
               .js-listen-form.css-listen-form
                 input.js-portNum.css-portNum(type='text')(data-protocol='')
                 a.js-openSocket.css-button.css-openSocket(data-protocol='') Listen
-              .js-listener-stream.css-stream(data-protocol='')(listener-name='default')
-              a.css-button.js-clear(data-protocol='')(listener-name='default') Clear
+              .js-listener-stream.css-stream(data-protocol='')(listener-port='default')
+              a.css-button.js-clear(data-protocol='')(listener-port='default') Clear
+
+        li.js-listener-tab-template.js-listener-tab
+          a(href='')
+          span.js-close-tab.css-close-tab(data-protocol='')(listener-port='') x
 
         span.js-message-template
           span
@@ -38,10 +42,6 @@ html(lang='en')
             span
             code.highlight-me
         span.js-tab-template
-          li.js-ui-tab(data-protocol='')
-            a(href='')
-            span.js-close-tab.css-close-tab x
-        div
 
     script(src='./vendor/highlight.pack.js', type='text/javascript')
     script(src='pakmanaged.js', type='text/javascript')
