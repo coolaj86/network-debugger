@@ -69,7 +69,7 @@
 
     opts.protocol = protocol;
     opts.display  = protocol.toUpperCase();
-    opts.href = '/'+protocol+'/default';
+    opts.href = '#/'+protocol+'/default';
 
     $('.js-protocol-tab-holder').append(protocolTabTemplate(opts));
   }

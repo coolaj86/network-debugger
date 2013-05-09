@@ -6,7 +6,6 @@
   var $ = require('ender')
     , url = require('url')
     , window = require('window')
-    , document = window.document
     , location = window.location
     ;
 
@@ -42,38 +41,6 @@
     }
 
     global.window.addEventListener('hashchange', displayTab);
-
-    $.domReady(function () {
-      $(root).delegate(uiTabs, 'click', function (ev) {
-        var href = url.resolve(location.href, $(this).attr('href'))
-          , curHref = location.href.split('#').shift()
-          ;
-
-        if (href.substr(0, curHref.length) !== curHref) {
-          // in a different directory
-          return;
-        }
-
-        href = href.substr(curHref.length - 1);
-        //console.log(href);
-
-        // TODO robust click-jacking support
-        // valid for http/https: //domain.tld/resource
-        // /path/to/res
-        // path/to/res
-        // ./path/to/res
-        // ../path/to/res
-        // resolve relative hashtags #blah -> #/current/blah; #/blah -> #/blah
-        if (/^\/[^\/]?/.exec(href)) {
-          location.hash = '#' + href;
-          ev.preventDefault();
-        }
-      });
-
-      // TODO set default index
-      location.hash = location.hash.substr(1) || ('/' + defaultView);
-      displayTab();
-    });
   }
 
   module.exports.create = create;

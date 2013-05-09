@@ -12,7 +12,7 @@
     pure.injectNewTab({
       "class": ' js-'+port,
       "protocol": protocol,
-      "tabLink": '/' + protocol +'/'+port,
+      "tabLink": '#/' + protocol +'/'+port,
       "portNum": port
     });
 
