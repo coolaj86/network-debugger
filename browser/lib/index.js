@@ -403,6 +403,7 @@
     delete resp.result.socketPort;
 
     Object.keys(resp.result).forEach(function (protocol) {
+      pure.injectProtocolTab(protocol);
       if (Array.isArray(resp.result[protocol]) && resp.result[protocol].length > 0) {
         resp.result[protocol].forEach(function (listener) {
           tabs.makeNew(protocol, listener.portNum, listener.logSettings);
@@ -430,6 +431,8 @@
     var options = {};
     options.protocol = 'all';
     options.body = '';
+
+    pure.compileTemplates();
 
     uiTabs.create('body', '.js-ui-tab a', '.js-ui-tab', '.js-ui-tab-view', 'http/default');
 

@@ -9,15 +9,7 @@ html(lang='en')
         .css-logo
           img(src='images/spotterrf-labs-white-logo.png', alt='')
         .css-title Network Debugger
-        ul.css-tab-menu
-          li.js-ui-tab.js-https(data-protocol='https')
-            a(href='/https/default') HTTPS
-          li.js-ui-tab.js-http(data-protocol='http')
-            a(href='/http/default') HTTP
-          li.js-ui-tab.js-tcp(data-protocol='tcp')
-            a(href='/tcp/default') TCP
-          li.js-ui-tab.js-udp(data-protocol='udp')
-            a(href='/udp/default') UDP
+        ul.css-tab-menu.js-protocol-tab-holder
       .css-container.container
         .js-ui-tab-view.js-all.css-inactive(data-name='tcp')
           .css-tab-bar.js-tab-bar
@@ -76,6 +68,8 @@ html(lang='en')
           .css-tab-container.js-tab-container
 
       span.js-all-templates.css-hidden
+        li.js-protocol-tab-template.js-ui-tab(data-protocol='')
+          a(href='')
         span.js-message-template
           span
           br
