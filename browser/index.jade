@@ -13,14 +13,14 @@ html(lang='en')
       .css-container.container
 
       span.js-all-templates.css-hidden
-        li.js-protocol-tab-template.js-ui-tab(data-protocol='')
+        li.js-protocol-tab-template(data-protocol='')
           a(href='')
         .js-protocol-window-template.css-inactive(data-protocol='')
-          .js-listener-tab-bar.css-tab-bar(data-protocol='')
-            li.js-ui-tab.js-default.css-default.css-hidden
+          .js-listener-tab-bar.css-tab-bar.css-hidden(data-protocol='')
+            li.js-listener-tab.js-default.css-default
               a(href='')  +
           .js-listener-container.css-ui-tab-view(data-protocol='')
-            .js-listener-window.css-tab-container(data-protocol='')(listener-name='default')
+            .js-listener-window.css-tab-container(data-protocol='')(listener-port='default')
               p.css-enter-port Enter the port to listen on
               .js-listen-form.css-listen-form
                 input.js-portNum.css-portNum(type='text')(data-protocol='')

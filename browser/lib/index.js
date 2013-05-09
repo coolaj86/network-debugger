@@ -10,7 +10,6 @@
     , reqwest = require('reqwest')
     , window = require('window')
     , document = window.document
-    , uiTabs = require('./ui-tabs')
     , io = require('socket.io-browser')
     , socket
     , pd = require('pretty-data').pd
@@ -18,6 +17,8 @@
     , visual = require('./visual')
     , tabs = require('./newTab')
     ;
+
+  require('./ui-tabs');
 
   function processBody(options, data) {
     var xml
@@ -433,8 +434,6 @@
     options.body = '';
 
     pure.compileTemplates();
-
-    uiTabs.create('body', '.js-ui-tab a', '.js-ui-tab', '.js-ui-tab-view', 'http/default');
 
     reqwest({
       url: 'http://'+window.location.host+'/onPageLoad'

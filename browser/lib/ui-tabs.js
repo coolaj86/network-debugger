@@ -7,43 +7,55 @@
     , url = require('url')
     , window = require('window')
     , location = window.location
+    , lvlSelectors = [
+        {
+          tab: '.js-protocol-tab-template',
+          window: '.js-protocol-window-template',
+          attribute: 'data-protocol'
+        },
+        {
+          tab: '.js-listener-tab',
+          window: '.js-listener-window',
+          attribute: 'listener-port'
+        }
+      ]
     ;
 
-  function create(root, uiTabs, uiTab, uiView, defaultView) {
 
-    function displayTab() {
-      var resource = location.hash
-        , urlObj
-        , pathname
+  function displayTab() {
+    var resource = location.hash
+      , pathname
+      , attrs = ''
+      ;
+
+    if (0 !== resource.indexOf('#/')) {
+      location.hash = '#/' + location.hash;
+      // we just change the hash so we should get this event again
+      return;
+    }
+
+    pathname = url.parse(resource.substr(2), true, true).pathname;
+    pathname.split('/').forEach(function (value, level) {
+      var selectors = lvlSelectors[level]
         ;
 
-      if (0 !== resource.indexOf('#/')) {
-        location.hash = '#/' + defaultView;
+      if (!selectors || !value) {
         return;
       }
 
-      urlObj = url.parse(resource.substr(1), true, true);
+      // first deactivate all subcomponents of this part of the tree
+      $(selectors.tab + attrs).removeClass('selected');
+      $(selectors.window + attrs).hide();
 
-      pathname = urlObj.pathname.substr(1).replace('/', '_');
-      $(uiView).hide();
-      $(uiTab).removeClass('selected');
-      urlObj.pathname.split('/').forEach(function(view){
-        if(!view){
-          return;
-        }
-        if (0 === $(uiView + '[data-name=' + view + ']').length) {
-          location.hash = '#/' + defaultView;
-          return;
-        }
-        $(uiView + '[data-name=' + view + ']').show();
-        $(uiTab + '.js-' + view).addClass('selected');
-      });
-    }
-
-    global.window.addEventListener('hashchange', displayTab);
+      // then specify which branch to enter now and activate it
+      attrs += '['+selectors.attribute+'='+value+']';
+      $(selectors.tab + attrs).addClass('selected');
+      $(selectors.window + attrs).show();
+    });
   }
 
-  module.exports.create = create;
+  global.window.addEventListener('hashchange', displayTab);
+
 }());
 
 
