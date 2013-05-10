@@ -21,7 +21,6 @@
       ]
     ;
 
-
   function displayTab() {
     var resource = location.hash
       , pathname
@@ -59,24 +58,36 @@
   }
 
   function stateChange(protocol, port, open) {
-    if(protocol === 'all'){
-      $('.js-ui-tab-view.js-all').addClass('css-inactive');
-      $('.js-ui-tab-view.js-all').removeClass('css-active');
+    var selector = ''
+      , buttonEl
+      ;
+
+    if (protocol !== 'all') {
+      selector += '[data-protocol="' + protocol + '"]';
+      selector += '[listener-port="' + port + '"]';
     }
-    else if(open){
-      $('.js-ui-tab-view[data-name="'+protocol+'"]').addClass('css-active');
-      $('.js-ui-tab-view[data-name="'+protocol+'"]').removeClass('css-inactive');
-      $('.js-ui-tab-view[data-name="'+protocol+'"] .js-ui-tab-view[data-name="'+port+'"]').addClass('css-active');
-      $('.js-ui-tab-view[data-name="'+protocol+'"] .js-ui-tab-view[data-name="'+port+'"]').removeClass('css-inactive');
+
+    if (open) {
+      $('.js-listener-tab' + selector).addClass('css-active');
+      $('.js-listener-tab' + selector).removeClass('css-inactive');
+      $('.js-listener-window' + selector).addClass('css-active');
+      $('.js-listener-window' + selector).removeClass('css-inactive');
+
+      buttonEl = $('.js-listener-window' + selector).find('.js-reopen-listener');
+      buttonEl.removeClass('js-reopen-listener');
+      buttonEl.addClass('js-close-listener');
+      buttonEl.html('Close Listener');
     }
     else {
-      $('.js-ui-tab-view[data-name="'+protocol+'"] .js-ui-tab-view[data-name="'+port+'"]').removeClass('css-active');
-      $('.js-ui-tab-view[data-name="'+protocol+'"] .js-ui-tab-view[data-name="'+port+'"]').addClass('css-inactive');
+      $('.js-listener-tab' + selector).addClass('css-inactive');
+      $('.js-listener-tab' + selector).removeClass('css-active');
+      $('.js-listener-window' + selector).addClass('css-inactive');
+      $('.js-listener-window' + selector).removeClass('css-active');
 
-      if($('.js-ui-tab-view[data-name="'+protocol+'"] .js-tab-bar').children().length <= 1) {
-        $('.js-ui-tab-view[data-name="'+protocol+'"]').removeClass('css-active');
-        $('.js-ui-tab-view[data-name="'+protocol+'"]').addClass('css-inactive');
-      }
+      buttonEl = $('.js-listener-window' + selector).find('.js-close-listener');
+      buttonEl.removeClass('js-close-listener');
+      buttonEl.addClass('js-reopen-listener');
+      buttonEl.html('Reopen Listener');
     }
   }
 
