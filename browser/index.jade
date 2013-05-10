@@ -13,24 +13,26 @@ html(lang='en')
       .css-container.container
 
       span.js-all-templates.css-hidden
-        li.js-protocol-tab-template.js-protocol-tab(data-protocol='')
-          a(href='')
-        .js-protocol-window-template.js-protocol-window.css-inactive(data-protocol='')
-          .js-listener-tab-bar.css-tab-bar.css-hidden(data-protocol='')
-            li.js-listener-tab.js-default.css-default
-              a(href='')  +
-          .js-listener-container.css-ui-tab-view(data-protocol='')
-            .js-listener-window.css-tab-container(data-protocol='')(listener-port='default')
-              p.css-enter-port Enter the port to listen on
-              .js-listen-form.css-listen-form
-                input.js-portNum.css-portNum(type='text')(data-protocol='')
-                a.js-openSocket.css-button.css-openSocket(data-protocol='') Listen
-              .js-listener-stream.css-stream(data-protocol='')(listener-port='default')
-              a.css-button.js-clear(data-protocol='')(listener-port='default') Clear
+        .js-protocol-templates
+          li.js-protocol-tab-template.js-protocol-tab(data-protocol='')
+            a(href='')
+          .js-protocol-window-template.js-protocol-window.css-inactive(data-protocol='')
+            .js-listener-tab-bar.css-tab-bar.css-hidden(data-protocol='')
+              li.js-listener-tab.js-default.css-default
+                a(href='')  +
+            .js-listener-container.css-ui-tab-view(data-protocol='')
+              .js-listener-window.css-tab-container(data-protocol='')(listener-port='default')
+                p.css-enter-port Enter the port on which to listen
+                .js-listen-form.css-listen-form
+                  input.js-portNum.css-portNum(type='text')(data-protocol='')
+                  a.js-openSocket.css-button.css-openSocket(data-protocol='') Listen
+                .js-listener-stream.css-stream(data-protocol='')(listener-port='default')
+                a.css-button.js-clear(data-protocol='')(listener-port='default') Clear
 
-        li.js-listener-tab-template.js-listener-tab
-          a(href='')
-          span.js-close-tab.css-close-tab(data-protocol='')(listener-port='') x
+        .js-listener-templates
+          li.js-listener-tab-template.js-listener-tab
+            a(href='')
+            span.js-close-tab.css-close-tab(data-protocol='')(listener-port='') x
 
         span.js-message-template
           span
