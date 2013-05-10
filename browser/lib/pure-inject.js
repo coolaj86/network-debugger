@@ -8,8 +8,6 @@
     , messageTemplate
     , codeDir
     , codeTemplate
-    , timestampDir
-    , timestampTemplate
     , protocolTabTemplate
     , protocolWindowTemplate
     , listenerTabTemplate
@@ -17,15 +15,14 @@
     ;
 
   messageDir = {
+    'div': 'time',
     'span': 'body',
     '@class': 'cssClass'
   };
   codeDir = {
+    'div': 'time',
     'span': 'code',
     'code': 'xml'
-  };
-  timestampDir = {
-    'div': 'time'
   };
 
   function compileTemplates() {
@@ -72,7 +69,6 @@
       'a@listener-port': 'portNum'
     });
 
-    timestampTemplate = pure('.js-timestamp-template').compile(timestampDir);
     messageTemplate = pure('.js-message-template').compile(messageDir);
     codeTemplate = pure('.js-code-template').compile(codeDir);
     //tabContainerTemplate = pure('.js-tab-container-template').compile(tabContainerDir);
@@ -117,8 +113,8 @@
   }
 
   function injectMessage(options, data) {
-
-    var stream;
+    var selector
+      ;
 
     if (!options.hasOwnProperty('protocol')) {
       console.error('received code injection request without protocol');
@@ -130,12 +126,15 @@
     }
     data = data || options;
 
-    stream = $('.js-ui-tab-view[data-name="'+options.port+'"] .js-'+options.protocol+'-stream');
-    stream.append(addTime() + messageTemplate(data));
+    selector  = '[data-protocol="' + options.protocol + '"]';
+    selector  = '[listener-port="' + options.port + '"]';
+    data.time = new Date().toString();
+    $('.js-listener-stream' + selector).append(messageTemplate(data));
   }
 
   function injectCode(options, data) {
-    var stream;
+    var selector
+      ;
 
     if (!options.hasOwnProperty('protocol')) {
       console.error('received code injection request without protocol');
@@ -146,12 +145,10 @@
       return;
     }
 
-    stream = $('.js-ui-tab-view[data-name="'+options.port+'"] .js-'+options.protocol+'-stream');
-    stream.append(addTime() + codeTemplate(data));
-  }
-
-  function addTime () {
-    return timestampTemplate({'time': new Date().toString()});
+    selector  = '[data-protocol="' + options.protocol + '"]';
+    selector  = '[listener-port="' + options.port + '"]';
+    data.time = new Date().toString();
+    $('.js-listener-stream' + selector).append(codeTemplate(data));
   }
 
   module.exports.compileTemplates = compileTemplates;

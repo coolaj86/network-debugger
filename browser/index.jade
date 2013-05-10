@@ -49,17 +49,16 @@ html(lang='en')
             .js-scroll-info.css-bottom.css-right
               p Lock scroll to bottom
                 input.js-scroll-lock(type="checkbox")(data-protocol='')(listener-port='')
-
-        span.js-message-template
-          span
-          br
-        span.js-timestamp-template
-          .css-streamTime
-        span.js-code-template
-          pre
+        .js-stream-templates
+          span.js-message-template
+            .css-streamTime
             span
-            code.highlight-me
-        span.js-tab-template
+            br
+          span.js-code-template
+            .css-streamTime
+            pre
+              span
+              code.highlight-me
 
     script(src='./vendor/highlight.pack.js', type='text/javascript')
     script(src='pakmanaged.js', type='text/javascript')
