@@ -127,7 +127,7 @@
     data = data || options;
 
     selector  = '[data-protocol="' + options.protocol + '"]';
-    selector  = '[listener-port="' + options.port + '"]';
+    selector += '[listener-port="' + options.port + '"]';
     data.time = new Date().toString();
     $('.js-listener-stream' + selector).append(messageTemplate(data));
   }

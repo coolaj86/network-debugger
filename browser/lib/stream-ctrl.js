@@ -71,16 +71,14 @@
   }
 
   function scrollLock(protocol, port) {
-    var selector = '.js-ui-tab-view[data-name="'+port+'"]'
+    var selector = '[data-protocol="'+protocol+'"][listener-port="'+port+'"]'
       ;
 
-    if ($(selector +' .js-scroll.js-'+protocol).attr('checked') && $(selector +' .js-'+protocol+'-stream')[0].scrollHeight !== 0) {
-      $(selector + ' .js-'+protocol+'-stream')[0].scrollTop = $(selector +' .js-'+protocol+'-stream')[0].scrollHeight;
+    if ($('.js-scroll-lock'+selector).attr('checked') && $('.js-listener-stream'+selector)[0].scrollHeight !== 0) {
+      $('.js-listener-stream'+selector)[0].scrollTop = $('.js-listener-stream'+selector)[0].scrollHeight;
     }
-    if ($(selector +' .js-'+protocol+'-stream').children().length > 9) {
-      //console.log('cleared space: '+portName);
-      $(selector +' .js-'+protocol+'-stream span').first().remove();
-      $(selector +' .js-'+protocol+'-stream span').first().remove();
+    while ($('.js-listener-stream'+selector).children().length > 9) {
+      $('.js-listener-stream'+selector).first().remove();
     }
   }
 
