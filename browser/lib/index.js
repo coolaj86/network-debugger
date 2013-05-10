@@ -235,6 +235,66 @@
     });
   }
 
+
+  function updateListenerSettings(listener) {
+    var selector
+      , logSettings = listener.logSettings
+      ;
+
+    selector  = '.js-listener-window';
+    selector += '[data-protocol="' + listener.protocol + '"]';
+    selector += '[listener-port="' + listener.port + '"]';
+
+    if (logSettings.logData) {
+      $(selector).find('.js-toggle-log').addClass('activeLog');
+    }
+    else {
+      $(selector).find('.js-toggle-log').removeClass('activeLog');
+    }
+
+    if (logSettings.hasOwnProperty('includeHeaders')) {
+      $(selector).find('.js-log-headers-display').show();
+      $(selector).find('.js-save-headers').attr('checked', !!logSettings.includeHeaders);
+    }
+    else {
+      $(selector).find('.js-log-headers-display').hide();
+    }
+
+    $(selector).find('.js-separate-packets').attr('checked', !!logSettings.separateFiles);
+  }
+
+  function addListenerTab(listener) {
+    var options = {}
+      , count
+      , selector
+      ;
+
+    selector  = '.js-listener-window';
+    selector += '[data-protocol="' + listener.protocol + '"]';
+    selector += '[listener-port="' + listener.port + '"]';
+
+    count = $(selector).length;
+    if (count === 0) {
+      pure.injectListenerTab(listener.protocol, listener.port);
+      count = $(selector).length;
+      location.hash = '#/'+listener.protocol+'/'+listener.port;
+    }
+    if (count !== 1) {
+      // notify user
+    }
+    updateListenerSettings(listener);
+
+    visual.stateChange(listener.protocol, listener.port, true);
+
+    options.active = true;
+    options.cssClass = 'css-streamNewConnection';
+    options.protocol = listener.protocol;
+    options.body = listener.protocol.toUpperCase() + ' listener open on port ' + listener.port;
+
+    injectMessage(options, 'default');
+    injectMessage(options, listener.port);
+  }
+
   //EVENT LISTENERS ALL
   $('.container').delegate('.js-openSocket', 'click', function () {
     var protocol = $(this).attr('data-protocol')
@@ -312,39 +372,12 @@
   function openSocket(port) {
     socket = io.connect('http://'+window.location.hostname+':'+port);
 
+    socket.on('listenerCreated', addListenerTab);
+    socket.on('listenerChanged', updateListenerSettings);
+
     socket.on('connect', function () {
       socket.send('hi');
 
-      socket.on('listenerCreated', function (msg) {
-        var options = {}
-          , reopen
-          ;
-
-        reopen = $('.js-ui-tab-view[data-name="' + msg.protocol + '"]').find('.js-ui-tab-view[data-name="' + msg.port + '"]').length > 0;
-        if (!reopen) {
-          tabs.makeNew(msg.protocol, msg.port, msg.logSettings);
-        }
-
-        if (msg.logSettings.logData) {
-          $('.js-ui-tab-view[data-name="' + msg.protocol + '"] .js-ui-tab-view[data-name="' + msg.port + '"] .js-log').addClass('activeLog');
-        }
-        else {
-          $('.js-ui-tab-view[data-name="' + msg.protocol + '"] .js-ui-tab-view[data-name="' + msg.port + '"] .js-log').removeClass('activeLog');
-        }
-
-        $('.js-ui-tab-view[data-name="' + msg.protocol + '"] .js-ui-tab-view[data-name="' + msg.port + '"] .js-separate-files').attr('checked', msg.logSettings.separateFiles);
-        $('.js-ui-tab-view[data-name="' + msg.protocol + '"] .js-ui-tab-view[data-name="' + msg.port + '"] .js-include-headers').attr('checked', msg.logSettings.includeHeaders);
-
-        visual.stateChange(msg.protocol, msg.port, true);
-
-        options.active = true;
-        options.cssClass = 'css-streamNewConnection';
-        options.protocol = msg.protocol;
-        options.body = msg.protocol.toUpperCase() + ' listener opened on port ' + msg.port;
-
-        injectMessage(options, 'default');
-        injectMessage(options, msg.port);
-      });
 
       socket.on('listenerData', function (msg) {
         preInjectCode(msg);
@@ -354,18 +387,6 @@
         //console.log('TODO: implement connectionChange:', msg);
         //$('.js-tcp-connection-count').html(count);
       //});
-
-      socket.on('listenerChanged', function (msg) {
-        if (msg.logSettings.logData) {
-          $('.js-ui-tab-view[data-name="' + msg.protocol + '"] .js-ui-tab-view[data-name="' + msg.port + '"] .js-log').addClass('activeLog');
-        }
-        else {
-          $('.js-ui-tab-view[data-name="' + msg.protocol + '"] .js-ui-tab-view[data-name="' + msg.port + '"] .js-log').removeClass('activeLog');
-        }
-
-        $('.js-ui-tab-view[data-name="' + msg.protocol + '"] .js-ui-tab-view[data-name="' + msg.port + '"] .js-separate-files').attr('checked', msg.logSettings.separateFiles);
-        $('.js-ui-tab-view[data-name="' + msg.protocol + '"] .js-ui-tab-view[data-name="' + msg.port + '"] .js-include-headers').attr('checked', msg.logSettings.includeHeaders);
-      });
 
       socket.on('listenerClosed', function (msg) {
         var options = {};
@@ -395,32 +416,18 @@
   }
 
   function initBuild(resp) {
-    var options = {};
 
     openSocket(resp.result.socketPort);
     // delete the socket port to make sure it isn't interpretted as a protocol
     delete resp.result.socketPort;
 
     Object.keys(resp.result).forEach(function (protocol) {
-      pure.injectProtocolTab(protocol);
-      if (Array.isArray(resp.result[protocol]) && resp.result[protocol].length > 0) {
+      if (Array.isArray(resp.result[protocol])) {
+        pure.injectProtocolTab(protocol);
         resp.result[protocol].forEach(function (listener) {
-          tabs.makeNew(protocol, listener.portNum, listener.logSettings);
-          if (listener.logSettings.logData) {
-            $('.js-ui-tab-view[data-name="' + protocol + '"] .js-ui-tab-view[data-name="' + listener.portNum + '"] .js-log').addClass('activeLog');
-          }
-          else {
-            $('.js-ui-tab-view[data-name="' + protocol + '"] .js-ui-tab-view[data-name="' + listener.portNum + '"] .js-log').removeClass('activeLog');
-          }
-          $('.js-ui-tab-view[data-name="' + protocol + '"] .js-ui-tab-view[data-name="' + listener.portNum + '"] .js-separate-files').attr('checked', listener.logSettings.separateFiles);
-          $('.js-ui-tab-view[data-name="' + protocol + '"] .js-ui-tab-view[data-name="' + listener.portNum + '"] .js-include-headers').attr('checked', listener.logSettings.includeHeaders);
-
-          options.body = protocol.toUpperCase() + ' listener open on port '+ listener.portNum;
-          options.cssClass = 'css-streamNewConnection';
-          options.protocol = protocol;
-          injectMessage(options, 'default');
-          injectMessage(options, listener.portNum);
-          visual.stateChange(protocol, listener.portNum, true);
+          listener.protocol = protocol;
+          listener.port = listener.port || listener.portNum;
+          addListenerTab(listener);
         });
       }
     });
