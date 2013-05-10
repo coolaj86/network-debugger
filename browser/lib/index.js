@@ -303,7 +303,7 @@
 
     openListener(protocol, port);
   });
-  $('.container').delegate('.js-ui-tab-view:not(.css-active) .js-portNum', 'keypress', function (e) {
+  $('.container').delegate('.js-portNum', 'keypress', function (e) {
     if (e.keyCode === 13) {
       $('.js-openSocket[data-protocol="'+$(this).attr('data-protocol')+'"]').trigger('click');
     }
@@ -334,26 +334,27 @@
   $('.container').delegate('.js-clear', 'click', function () {
     $(this).closest('.js-ui-tab-view').find('.js-'+$(this).attr('data-protocol')+'-stream').html('');
   });
-  $('.container').delegate('.js-ui-tab-view:not(.css-inactive) .js-log', 'click', function () {
+
+  $('.container').delegate('.js-toggle-log', 'click', function () {
     var protocol = $(this).attr('data-protocol')
-      , port = $(this).closest('.js-ui-tab-view').attr('data-name')
+      , port = $(this).attr('listener-port')
       , curState = $(this).hasClass('activeLog')
       ;
 
     setListenerLogging(protocol, port, {logData: !curState});
   });
-  $('.container').delegate('.js-ui-tab-view:not(.css-inactive) .js-separate-files', 'click', function () {
+  $('.container').delegate('.js-separate-packets', 'click', function () {
     var protocol = $(this).attr('data-protocol')
-      , port = $(this).closest('.js-ui-tab-view').attr('data-name')
+      , port = $(this).attr('listener-port')
       , curState = $(this).attr('checked')
       ;
 
     // for the check boxes the state changes to was the user wants before we get the event
     setListenerLogging(protocol, port, {separateFiles: curState});
   });
-  $('.container').delegate('.js-ui-tab-view:not(.css-inactive) .js-include-headers', 'click', function () {
+  $('.container').delegate('.js-save-headers', 'click', function () {
     var protocol = $(this).attr('data-protocol')
-      , port = $(this).closest('.js-ui-tab-view').attr('data-name')
+      , port = $(this).attr('listener-port')
       , curState = $(this).attr('checked')
       ;
 
