@@ -90,9 +90,17 @@
     var options = {}
       ;
 
-    options.body = '';
+    // we only use the options here for error reporting
     options.protocol = protocol;
-    options.port = port;
+    options.cssClass = 'css-streamError';
+    options.port = 'default';
+
+
+    if (isNaN(port) || port < 0 || port > 65535) {
+      options.body = 'Specified port must be a number between 0 and 65535';
+      injectMessage(options, 'default');
+      return;
+    }
 
     reqwest({
       url: 'http://'+window.location.host+'/listeners/'+protocol+'/'+port
@@ -101,36 +109,35 @@
     , error: function (err) {
         console.error('Server Error: ', err);
         options.body = 'Cannot communicate with netbug server';
-        options.cssClass = 'css-streamError';
         injectMessage(options, 'default');
       }
     , success: function (resp) {
-        // If there wasn't an error, we will get the event listenerCreated,
-        // which should trigger anything we would want to do on success
         if (!resp.error && (!resp.result || !resp.result.error)) {
+          // If there wasn't an error, we will get the event listenerCreated,
+          // which should trigger anything we would want to do on success
           return;
         }
 
-        options.cssClass = 'css-streamError';
         if (resp.hasOwnProperty('result') && resp.result.hasOwnProperty('error')) {
-          options.body += resp.result.error;
+          options.body = resp.result.error;
+          injectMessage(options, 'default');
         }
         if (Array.isArray(resp.errors)) {
           resp.errors.forEach(function (error) {
             if (typeof error.message === 'string') {
-              options.body += error.message;
+              options.body = error.message;
             }
             else {
-              options.body += error.message.message || error.message.code;
+              options.body = error.message.message || error.message.toString();
             }
+
+            injectMessage(options, 'default');
           });
         }
         if (!options.body) {
           options.body = 'Unknown error opening linstener';
+          injectMessage(options, 'default');
         }
-
-        injectMessage(options, 'default');
-        injectMessage(options, port);
       }
     });
   }
@@ -181,7 +188,6 @@
         injectMessage(options, options.port);
       }
     });
-
   }
 
   function closeListener(protocol, port) {
@@ -230,24 +236,21 @@
   }
 
   //EVENT LISTENERS ALL
-  $('.container').delegate('.js-all-stream pre', 'click', function () {
-    $(this).toggleClass('css-hl-block');
-  });
-  $('.container').delegate('.js-ui-tab-view:not(.css-active) .js-openSocket', 'click', function () {
+  $('.container').delegate('.js-openSocket', 'click', function () {
     var protocol = $(this).attr('data-protocol')
-      , port = Number($('.js-portNum.js-'+protocol).val())
-      , options
+      , port = Number($('.js-portNum[data-protocol="'+protocol+'"]').val())
       ;
 
-    if (isNaN(port) || port < 0 || port > 65535) {
-      options = {};
-      options.protocol = protocol;
-      options.cssClass = 'css-streamError';
-      options.body = 'Specified port must be a number between 0 and 65535';
-      injectMessage(options, 'default');
-      return;
-    }
     openListener(protocol, port);
+  });
+  $('.container').delegate('.js-ui-tab-view:not(.css-active) .js-portNum', 'keypress', function (e) {
+    if (e.keyCode === 13) {
+      $('.js-openSocket[data-protocol="'+$(this).attr('data-protocol')+'"]').trigger('click');
+    }
+  });
+
+  $('.container').delegate('.js-all-stream pre', 'click', function () {
+    $(this).toggleClass('css-hl-block');
   });
   $('.container').delegate('.js-ui-tab-view:not(.css-active) .js-reopen', 'click', function () {
     openListener($(this).attr('data-protocol'), $(this).attr('data-port'));
@@ -264,11 +267,6 @@
     }
 
     tabs.closeTab(protocol, port, this);
-  });
-  $('.container').delegate('.js-ui-tab-view:not(.css-active) .js-portNum', 'keypress', function (e) {
-    if (e.keyCode === 13) {
-      $('.js-openSocket.js-'+$(this).attr('data-protocol')).trigger('click');
-    }
   });
   $('.container').delegate('.js-scroll', 'change', function () {
     scrollLock($(this).attr('data-protocol'), $(this).closest('.js-ui-tab-view').attr('data-name'));
