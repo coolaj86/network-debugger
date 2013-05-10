@@ -26,7 +26,7 @@
   });
   $('.container').delegate('.js-portNum', 'keypress', function (e) {
     if (e.keyCode === 13) {
-      $('.js-openSocket[data-protocol="'+$(this).attr('data-protocol')+'"]').trigger('click');
+      serverCtrl.openListener($(this).attr('data-protocol'), Number($(this).val()));
     }
   });
 
