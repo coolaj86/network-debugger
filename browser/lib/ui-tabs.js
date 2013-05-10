@@ -48,7 +48,7 @@
       $(selectors.window + attrs).hide();
 
       // then specify which branch to enter now and activate it
-      attrs += '['+selectors.attribute+'='+value+']';
+      attrs += '['+selectors.attribute+'="'+value+'"]';
       $(selectors.tab + attrs).addClass('selected');
       $(selectors.window + attrs).show();
     });

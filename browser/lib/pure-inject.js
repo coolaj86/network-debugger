@@ -51,6 +51,7 @@
     protocolWindowTemplate = pure('.js-protocol-window-template').compile({
       '@data-protocol': 'protocol',
       'div.js-listener-tab-bar@data-protocol': 'protocol',
+      'div.js-listener-tab-bar li@data-protocol': 'protocol',
       'div.js-listener-tab-bar li a@href': 'href',
       'div.js-listener-container@data-protocol': 'protocol',
       'div.js-listener-container div.js-listener-window@data-protocol': 'protocol',
@@ -60,8 +61,10 @@
     });
 
     listenerTabTemplate = pure('.js-listener-tab-template').compile({
-      'a@href': 'href',
       'a': 'display',
+      'a@href': 'href',
+      '@data-protocol': 'protocol',
+      '@listener-port': 'portNum',
       'span@data-protocol': 'protocol',
       'span@listener-port': 'portNum'
     });
@@ -103,6 +106,7 @@
     newElement = listenerTabTemplate(opts);
     newElement = $(newElement).removeClass('js-listener-tab-template');
     $('.js-listener-tab-bar[data-protocol='+protocol+']').append(newElement);
+    $('.js-listener-tab-bar[data-protocol='+protocol+']').removeClass('css-hidden');
   }
 
   function injectMessage(options, data) {
