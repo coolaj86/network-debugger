@@ -33,6 +33,22 @@ html(lang='en')
           li.js-listener-tab-template.js-listener-tab
             a(href='')
             span.js-close-tab.css-close-tab(data-protocol='')(listener-port='') x
+          .js-listener-window-template.js-listener-window.css-ui-tab-view(data-protocol='')(listener-port='')
+            .js-connection-info.css-connection-info
+              .js-connection-status.css-connection-status(data-protocol='')(listener-port='') Connection Status
+              a.js-reopen-listener.css-button.css-openSocket(data-protocol='')(listener-port='') Reopen Connection
+            .js-logging-info.css-top.css-right
+              .js-logging-options
+                p Save packets separately
+                  input.js-separate-packets(type="checkbox")(data-protocol='')(listener-port='')
+                p.js-log-headers-display Save HTTP headers
+                  input.js-save-headers(type="checkbox")(data-protocol='')(listener-port='')
+              a.js-toggle-log.css-button.css-log(data-protocol='')(listener-port='')
+            .js-listener-stream.css-stream(data-protocol='')(listener-port='')
+            a.js-clear-stream.css-button(data-protocol='')(listener-port='') Clear
+            .js-scroll-info.css-bottom.css-right
+              p Lock scroll to bottom
+                input.js-scroll-lock(type="checkbox")(data-protocol='')(listener-port='')
 
         span.js-message-template
           span
@@ -47,29 +63,3 @@ html(lang='en')
 
     script(src='./vendor/highlight.pack.js', type='text/javascript')
     script(src='pakmanaged.js', type='text/javascript')
-
-//
-  span.js-tab-container-template
-        .js-ui-tab-view.css-ui-tab-view.js-all.css-inactive(data-name='')
-          span.js-top-template
-            .css-log-options
-              input.js-include-headers(type="checkbox")
-              p Save headers
-            .css-listen-form
-              span.js-port-num.css-port-num(data-protocol='')(type='text')
-            .css-connection-info
-              .css-connection-status.js-http-connection-status.off Connection Status
-            .css-top.right
-              p Save each packet separately
-              input.js-http-multifile(type="checkbox")(checked="true")
-              a.css-button.js-log.css-log(data-protocol='')
-            .js-http-stream.js-all-stream.css-stream
-              span.js-allstream-error
-          span.js-bottom-template
-            .css-left.css-bottom
-              a.css-button.css-closeSocket.js-closeSocket(data-protocol='') Close Connection
-            .css-center.css-bottom
-              a.css-button.js-clear(data-protocol='') Clear
-            .css-right.css-bottom
-              p Lock scroll to bottom
-              input.js-scroll(type="checkbox")(checked="true")(data-protocol='')

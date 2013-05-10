@@ -13,6 +13,7 @@
     , protocolTabTemplate
     , protocolWindowTemplate
     , listenerTabTemplate
+    , listenerWindowTemplate
     ;
 
   messageDir = {
@@ -26,20 +27,6 @@
   timestampDir = {
     'div': 'time'
   };
-  /*tabContainerDir = {
-    'div.js-ui-tab-view@data-name': 'port-num',
-    '.js-ui-tab-view .css-listen-form .js-port-num@class': 'class-protocol',
-    //'.js-ui-tab-view .css-listen-form span.js-port-num@data-protocol': 'protocol',
-    //'.js-ui-tab-view .css-listen-form .js-port-num': 'port-num',
-    //'a.js-log@class': 'class-protocol',
-    'a.js-log@data-protocol': 'protocol',
-    //'div.js-closeSocket@class': 'class-protocol',
-    'div.js-closeSocket@data-protocol': 'protocol',
-    'div.js-clear@class': 'class-protocol',
-    'div.js-clear@data-protocol': 'protocol',
-    'div.js-scroll@class': 'class-protocol',
-    'div.js-scroll@data-protocol': 'protocol'
-  };*/
 
   function compileTemplates() {
     protocolTabTemplate = pure('.js-protocol-tab-template').compile({
@@ -67,6 +54,22 @@
       '@listener-port': 'portNum',
       'span@data-protocol': 'protocol',
       'span@listener-port': 'portNum'
+    });
+    listenerWindowTemplate = pure('.js-listener-window-template').compile({
+      '@data-protocol': 'protocol',
+      '@listener-port': 'portNum',
+      'div.js-connection-info a@data-protocol': 'protocol',
+      'div.js-connection-info a@listener-port': 'portNum',
+      'div.js-connection-info div@data-protocol': 'protocol',
+      'div.js-connection-info div@listener-port': 'portNum',
+      'div.js-logging-info a@data-protocol': 'protocol',
+      'div.js-logging-info a@listener-port': 'portNum',
+      'div.js-logging-info div p input@data-protocol': 'protocol',
+      'div.js-logging-info div p input@listener-port': 'portNum',
+      'div.js-listener-stream@data-protocol': 'protocol',
+      'div.js-listener-stream@listener-port': 'portNum',
+      'a@data-protocol': 'protocol',
+      'a@listener-port': 'portNum'
     });
 
     timestampTemplate = pure('.js-timestamp-template').compile(timestampDir);
@@ -107,6 +110,10 @@
     newElement = $(newElement).removeClass('js-listener-tab-template');
     $('.js-listener-tab-bar[data-protocol='+protocol+']').append(newElement);
     $('.js-listener-tab-bar[data-protocol='+protocol+']').removeClass('css-hidden');
+
+    newElement = listenerWindowTemplate(opts);
+    newElement = $(newElement).removeClass('js-listener-window-template');
+    $('.js-listener-container[data-protocol='+protocol+']').append(newElement);
   }
 
   function injectMessage(options, data) {

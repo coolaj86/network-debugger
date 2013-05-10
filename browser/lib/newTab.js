@@ -4,14 +4,11 @@
   var ender = require('ender')
     , $ = ender
     , pure = require('./pure-inject')
-    , notPure = require('./not-so-pure')
     , window = require('window')
     ;
 
   function makeNew(protocol, port, logSettings) {
-    pure.injectListenerTab(protocol, port);
-
-    notPure.injectTabView(protocol, port, logSettings);
+    pure.injectListenerTab(protocol, port, logSettings);
 
     // now that we have atleast one tab open display the default tab as visible
     $('.js-listener-tab-bar[data-protocol='+protocol+']').removeClass('css-hidden');
