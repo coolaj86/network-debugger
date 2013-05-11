@@ -20,12 +20,12 @@ html(lang='en')
             .js-listener-tab-bar.css-tab-bar.css-hidden(data-protocol='')
               li.js-listener-tab.css-listener-tab.css-default-tab(data-protocol='')(listener-port='default')
                 a.js-tab(data-protocol='')(listener-port='default')  +
-            .js-listener-container.css-ui-tab-view(data-protocol='')
-              .js-listener-window.css-tab-container(data-protocol='')(listener-port='default')
-                p.css-enter-port Enter the port on which to listen
+            .js-listener-container(data-protocol='')
+              .js-listener-window.css-listener-window(data-protocol='')(listener-port='default')
                 .js-listen-form.css-listen-form
-                  input.js-portNum.css-portNum(type='text')(data-protocol='')
-                  a.js-open-listener.css-button.css-openSocket(data-protocol='') Listen
+                  p Enter the port on which to listen
+                  input.js-portNum.css-input-port(type='text')(data-protocol='')
+                  a.js-open-listener.css-button(data-protocol='') Listen
                 .js-listener-stream.css-stream(data-protocol='')(listener-port='default')
                 a.css-button.js-clear(data-protocol='')(listener-port='default') Clear
 
@@ -33,7 +33,7 @@ html(lang='en')
           li.js-listener-tab-template.js-listener-tab.css-listener-tab
             a.js-tab(data-protocol='')(listener-port='')
             span.js-close-listener-tab.css-close-tab(data-protocol='')(listener-port='') x
-          .js-listener-window-template.js-listener-window.css-ui-tab-view(data-protocol='')(listener-port='')
+          .js-listener-window-template.js-listener-window.css-listener-window(data-protocol='')(listener-port='')
             .js-connection-info.css-connection-info
               .js-connection-status.css-connection-status(data-protocol='')(listener-port='') Connection Status
               a.js-close-listener.css-button(data-protocol='')(listener-port='') Close Connection

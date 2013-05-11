@@ -162,21 +162,25 @@ body{
     }
   }
 }
-.css-ui-tab-view{
+.css-listener-window{
   padding: 20px;
   p{
-    color: #ccc;
-    -webkit-margin-before: 0px;
+    display: inline;
     font-size: 15px;
+    color: rgb(204, 204, 204);
+    -webkit-margin-before: 0px;
     -webkit-margin-after: 4px;
   }
-  .css-portNum{
-    background-color: #D1D1D1;
-    margin-right: 15px;
-    margin-left: 15px;
-    width: 70px;
-    text-align: right;
-    margin-bottom: 10px;
+  .css-listen-form{
+    float: left;
+    .css-input-port{
+      background-color: rgb(209, 209, 209);
+      margin-bottom: 10px;
+      margin-right: 15px;
+      margin-left: 15px;
+      width: 70px;
+      text-align: right;
+    }
   }
   .css-log{
     &:before{
@@ -185,9 +189,6 @@ body{
     &.activeLog:before{
       content: 'Stop Log';
     }
-  }
-  .css-enter-port{
-    float: left; 
   }
   .css-log-options{
     float: right;
@@ -288,10 +289,6 @@ body{
   }
 }
 
-.css-listen-form{
-  float: left;
-  width: 200px;
-}
 .css-connection-info{
   float: left;
   padding-top: 4px;
