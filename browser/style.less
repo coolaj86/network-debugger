@@ -109,45 +109,56 @@ body{
 	min-height: 475px;
 	overflow: hidden;
 }
-.css-close-tab{
-  border-radius: 15px;
-  height: 15px;
-  width: 15px;
-  display: inline-block;
-  content: 'x';
-  position: relative;
-  right: 5px;
-  text-align: center;
-  line-height: 12px;
-  color: #888;
-  background: rgba(60, 60, 60, 0.2);
-  &:hover{
-    background: #555;
-    cursor: pointer;
-    color: #AAA;
-  }
-}
 .css-hidden{
   display: none;
 }
 .css-tab-bar{
-  background: #222;
-  max-height: 29px;
+  background: rgb(34, 34, 34);
+  padding: 0px ;
   overflow: hidden;
-  li{
-    background: #333;
+  .css-listener-tab{
+    background: rgb(51, 51, 51);
+    height: 19px;
     padding: 5px 0px;
     float: left;
     list-style-type: none;
     border-radius: 8px 8px 0px 0px;
     margin-right:4px;
-    &.selected{
-      background: #64665B;
-    }
     a{
-      color: #ccc;
+      color: rgb(204, 204, 204);
       text-decoration: none;
       padding: 4px 10px;
+    }
+    &.css-default-tab a{
+      font-size: 27px;
+      font-weight: bold;
+      padding: 0px 17px;
+      text-shadow: 0px 0px 4px black;
+      line-height: 18px;
+    }
+    &.selected{
+      background: rgb(100, 102, 91);
+    }
+    &:hover:not(.selected){
+      cursor: pointer;
+      background: rgb(60, 60, 60);
+    }
+    .css-close-tab{
+      border-radius: 15px;
+      height: 15px;
+      width: 15px;
+      display: inline-block;
+      position: relative;
+      right: 5px;
+      text-align: center;
+      line-height: 12px;
+      color: #888;
+      background: rgba(60, 60, 60, 0.2);
+      &:hover{
+        background: #555;
+        cursor: pointer;
+        color: #AAA;
+      }
     }
   }
 }
@@ -208,13 +219,6 @@ body{
       background: -webkit-radial-gradient(center, ellipse cover, #AA3636 23%, #64665B 100%);
     }
   }
-}
-.css-default a{
-  font-weight: bold;
-  padding: 0px 15px!important;
-  text-shadow: 0px 0px 4px black;
-  font-size: 22px;
-  line-height: 18px;
 }
 .css-button{
 	padding: 4px 12px 6px 12px;
