@@ -6,6 +6,7 @@
 (function () {
   "use strict";
   var $ = require('ender')
+    , url = require('url')
     , reqwest = require('reqwest')
     , window = require('window')
     , document = window.document
@@ -139,6 +140,19 @@
   }
 
   function initBuild(resp) {
+    var hash= url.parse(window.location.hash.substr(2), true, true).pathname
+      , validHash = []
+      ;
+
+    // substring is to remove leading "#/" so we can process
+    // the hash as a pathname to remove anything we can't handle
+    if (hash) {
+      hash = hash.split('/');
+    }
+    else {
+      hash = [];
+    }
+
 
     openSocket(resp.result.socketPort);
     // delete the socket port to make sure it isn't interpretted as a protocol
@@ -147,11 +161,27 @@
     Object.keys(resp.result).forEach(function (protocol) {
       if (Array.isArray(resp.result[protocol])) {
         tabCtrl.addProtocolTab(protocol);
+        if (hash[0] === protocol) {
+          validHash[0] = protocol;
+          if (hash[1] === 'default') {
+            validHash[1] = hash[1];
+          }
+        }
         resp.result[protocol].forEach(function (listener) {
-          tabCtrl.addListenerTab(protocol, listener.portNum || listener.portNum, listener.logSettings);
+          listener.port = listener.port || listener.portNum;
+          tabCtrl.addListenerTab(protocol, listener.port, listener.logSettings);
+          if (hash[0] === protocol && hash[1] === listener.port.toString()) {
+            validHash[1] = hash[1];
+          }
         });
       }
     });
+
+    if (validHash[0]) {
+      setTimeout(function () {
+        window.location.hash = '#/' + validHash.join('/');
+      }, 50);
+    }
   }
 
   $(document).ready(function () {
