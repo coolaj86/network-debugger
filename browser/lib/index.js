@@ -123,7 +123,7 @@
       options.cssClass = 'css-streamCloseConnection';
       options.protocol = msg.protocol;
       streamCtrl.injectMessage(options, 'default');
-      streamCtrl.injectMessage(options, port);
+      streamCtrl.injectMessage(options, msg.port);
 
       tabCtrl.deactivateTab(msg.protocol, msg.port);
     });
