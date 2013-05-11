@@ -74,11 +74,11 @@
     var selector = '[data-protocol="'+protocol+'"][listener-port="'+port+'"]'
       ;
 
-    if ($('.js-scroll-lock'+selector).attr('checked') && $('.js-listener-stream'+selector)[0].scrollHeight !== 0) {
-      $('.js-listener-stream'+selector)[0].scrollTop = $('.js-listener-stream'+selector)[0].scrollHeight;
-    }
     while ($('.js-listener-stream'+selector).children().length > 9) {
       $('.js-listener-stream'+selector).first().remove();
+    }
+    if ($('.js-scroll-lock'+selector).attr('checked') && $('.js-listener-stream'+selector)[0].scrollHeight !== 0) {
+      $('.js-listener-stream'+selector)[0].scrollTop = $('.js-listener-stream'+selector)[0].scrollHeight;
     }
   }
 
@@ -98,6 +98,14 @@
     scrollLock(options.protocol, port);
   }
 
+  function clearStream(protocol, port) {
+    var selector = '[data-protocol="'+protocol+'"][listener-port="'+port+'"]'
+      ;
+
+    $('.js-listener-stream'+selector).html('');
+  }
+
   module.exports.preInjectCode = preInjectCode;
   module.exports.injectMessage = injectMessage;
+  module.exports.clearStream   = clearStream;
 }());

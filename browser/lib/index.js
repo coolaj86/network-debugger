@@ -30,14 +30,14 @@
     }
   });
 
-  $('.container').delegate('.js-all-stream pre', 'click', function () {
+  $('.container').delegate('.js-listener-stream pre', 'click', function () {
     $(this).toggleClass('css-hl-block');
   });
   $('.container').delegate('.js-scroll', 'change', function () {
-    streamCtrl.scrollLock($(this).attr('data-protocol'), $(this).closest('.js-ui-tab-view').attr('data-name'));
+    streamCtrl.scrollLock($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
   $('.container').delegate('.js-clear', 'click', function () {
-    $(this).closest('.js-ui-tab-view').find('.js-'+$(this).attr('data-protocol')+'-stream').html('');
+    streamCtrl.clearStream($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
 
   $('.container').delegate('.js-toggle-log', 'click', function () {
@@ -79,7 +79,21 @@
 
   //SOCKET COMMUNICATION WITH SERVER
   function openSocket(port) {
-    var socket = io.connect('http://'+window.location.hostname+':'+port);
+    var socket = io.connect('http://'+window.location.hostname+':'+port)
+      , initialConnect = true
+      , reconnect = false
+      ;
+
+    socket.on('connect', function () {
+      socket.send('hi');
+
+      if (reconnect) {
+        // reload information
+      }
+      else if (!initialConnect) {
+        console.error('socket IO connected again without disconnecting');
+      }
+    });
 
     socket.on('listenerCreated', function (msg){
       tabCtrl.addListenerTab(msg.protocol, msg.port, msg.logSettings);
@@ -88,43 +102,39 @@
       tabCtrl.updateListenerSettings(msg.protocol, msg.port, msg.logSettings);
     });
 
-    socket.on('connect', function () {
-      socket.send('hi');
+    socket.on('listenerData', function (msg) {
+      streamCtrl.preInjectCode(msg);
+    });
 
+    //socket.on('connectionChange', function (msg) {
+      //console.log('TODO: implement connectionChange:', msg);
+      //$('.js-tcp-connection-count').html(count);
+    //});
 
-      socket.on('listenerData', function (msg) {
-        streamCtrl.preInjectCode(msg);
-      });
+    socket.on('listenerClosed', function (msg) {
+      var options = {};
 
-      //socket.on('connectionChange', function (msg) {
-        //console.log('TODO: implement connectionChange:', msg);
-        //$('.js-tcp-connection-count').html(count);
-      //});
+      options.body = msg.protocol.toUpperCase() + ' Listener on port ' + msg.port + ' closed';
+      options.cssClass = 'css-streamCloseConnection';
+      options.protocol = msg.protocol;
+      streamCtrl.injectMessage(options, 'default');
+      streamCtrl.injectMessage(options, port);
 
-      socket.on('listenerClosed', function (msg) {
-        var options = {};
+      tabCtrl.deactivateTab(msg.protocol, msg.port);
+    });
 
-        options.body = msg.protocol.toUpperCase() + ' Listener on port ' + msg.port + ' closed';
-        options.cssClass = 'css-streamCloseConnection';
-        options.protocol = msg.protocol;
-        streamCtrl.injectMessage(options, 'default');
-        streamCtrl.injectMessage(options, port);
+    socket.on('disconnect', function () {
+      var options = {};
 
-        tabCtrl.deactivateTab(msg.protocol, msg.port);
-      });
+      console.log('Browser-Disconnected socket');
+      options.cssClass = 'css-streamError';
+      options.body = 'NetBug Server Down';
+      options.protocol = 'all';
+      streamCtrl.injectMessage(options, 'default');
+      options.active = false;
+      tabCtrl.deactivateTab('all');
 
-      socket.on('disconnect', function () {
-        var options = {};
-
-        console.log('Browser-Disconnected socket');
-        options.cssClass = 'css-streamError';
-        options.body = 'NetBug Server Down';
-        options.protocol = 'all';
-        streamCtrl.injectMessage(options, 'default');
-        options.active = false;
-        tabCtrl.deactivateTab('all');
-      });
-
+      reconnect = true;
     });
   }
 

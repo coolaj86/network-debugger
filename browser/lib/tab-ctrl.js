@@ -154,22 +154,19 @@
   }
 
   function closeListenerTab(protocol, port) {
-    var selector
+    var selector = '[data-protocol="' + protocol + '"][listener-port="' + port + '"]'
       ;
 
-    // TODO: make conditional on still being open
-    serverCtrl.closeListener(protocol, port);
-
-    selector  = '[data-protocol="' + protocol + '"]';
-    selector += '[listener-port="' + port + '"]';
-
-    $('.js-listener-tab'+selector).remove();
-    $('.js-listener-window'+selector).remove();
+    if ($('.js-listener-window'+selector).hasClass('css-active')) {
+      serverCtrl.closeListener(protocol, port);
+    }
 
     // if the tab closed is the one we were on go to the default tab
-    if (location.hash === '#/'+protocol+'/'+port) {
+    if (!$('.js-listener-window'+selector).hasClass('css-hidden')) {
       location.hash = '#/'+protocol+'/default';
     }
+    $('.js-listener-tab'+selector).remove();
+    $('.js-listener-window'+selector).remove();
 
     // if only the default tab is left then hide the tab bar again
     if ($('.js-listener-tab-bar[data-protocol='+protocol+']').children().length <= 1){
