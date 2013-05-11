@@ -1,12 +1,9 @@
 /*jshint strict:true, browser:true, es5:true, onevar:true, laxcomma:true, laxbreak:true*/
 (function () {
   "use strict";
-  var ender = require('ender')
-    , $ = ender
+  var $ = require('ender')
     , pure = require('./pure').$p
-    , messageDir
     , messageTemplate
-    , codeDir
     , codeTemplate
     , protocolTabTemplate
     , protocolWindowTemplate
@@ -14,64 +11,37 @@
     , listenerWindowTemplate
     ;
 
-  messageDir = {
-    'div': 'time',
-    'span': 'body',
-    '@class': 'cssClass'
-  };
-  codeDir = {
-    'div': 'time',
-    'span': 'code',
-    'code': 'xml'
-  };
-
   function compileTemplates() {
-    protocolTabTemplate = pure('.js-protocol-tab-template').compile({
-      '@data-protocol': 'protocol',
-      'a@data-protocol': 'protocol',
-      'a': 'display'
-    });
-    protocolWindowTemplate = pure('.js-protocol-window-template').compile({
-      '@data-protocol': 'protocol',
-      'div.js-listener-tab-bar@data-protocol': 'protocol',
-      'div.js-listener-tab-bar li@data-protocol': 'protocol',
-      'div.js-listener-tab-bar li a@data-protocol': 'protocol',
-      'div.js-listener-container@data-protocol': 'protocol',
-      'div.js-listener-container div.js-listener-window@data-protocol': 'protocol',
-      'div.js-listener-container div.js-listener-window a@data-protocol': 'protocol',
-      'div.js-listener-container div.js-listener-window div.js-listen-form input@data-protocol': 'protocol',
-      'div.js-listener-container div.js-listener-window div.js-listen-form a@data-protocol': 'protocol'
+    var directive = {}
+      ;
+
+    directive.a = 'display';
+    ['', 'a', 'span'].forEach(function (type) {
+      directive[type+'@data-protocol'] = 'protocol';
+      directive[type+'@listener-port'] = 'portNum';
     });
 
-    listenerTabTemplate = pure('.js-listener-tab-template').compile({
-      'a': 'display',
-      'a@data-protocol': 'protocol',
-      'a@listener-port': 'portNum',
-      '@data-protocol': 'protocol',
-      '@listener-port': 'portNum',
-      'span@data-protocol': 'protocol',
-      'span@listener-port': 'portNum'
-    });
-    listenerWindowTemplate = pure('.js-listener-window-template').compile({
-      '@data-protocol': 'protocol',
-      '@listener-port': 'portNum',
-      'div.js-connection-info a@data-protocol': 'protocol',
-      'div.js-connection-info a@listener-port': 'portNum',
-      'div.js-connection-info div@data-protocol': 'protocol',
-      'div.js-connection-info div@listener-port': 'portNum',
-      'div.js-logging-info a@data-protocol': 'protocol',
-      'div.js-logging-info a@listener-port': 'portNum',
-      'div.js-logging-info div p input@data-protocol': 'protocol',
-      'div.js-logging-info div p input@listener-port': 'portNum',
-      'div.js-listener-stream@data-protocol': 'protocol',
-      'div.js-listener-stream@listener-port': 'portNum',
-      'a@data-protocol': 'protocol',
-      'a@listener-port': 'portNum'
-    });
+    protocolTabTemplate = pure('.js-protocol-tab-template').compile(directive);
+    listenerTabTemplate = pure('.js-listener-tab-template').compile(directive);
 
-    messageTemplate = pure('.js-message-template').compile(messageDir);
-    codeTemplate = pure('.js-code-template').compile(codeDir);
-    //tabContainerTemplate = pure('.js-tab-container-template').compile(tabContainerDir);
+    delete directive.a;
+    ['div', 'input', 'li'].forEach(function (type) {
+      directive[type+'@data-protocol'] = 'protocol';
+      directive[type+'@listener-port'] = 'portNum';
+    });
+    protocolWindowTemplate = pure('.js-protocol-window-template').compile(directive);
+    listenerWindowTemplate = pure('.js-listener-window-template').compile(directive);
+
+    messageTemplate = pure('.js-message-template').compile({
+      'div': 'time',
+      'span': 'body',
+      '@class': 'cssClass'
+    });
+    codeTemplate = pure('.js-code-template').compile({
+      'div': 'time',
+      'span': 'code',
+      'code': 'xml'
+    });
   }
 
   function injectProtocolTab(protocol) {
@@ -86,6 +56,7 @@
     newElement = $(newElement).removeClass('js-protocol-tab-template');
     $('.js-protocol-tab-bar').append(newElement);
 
+    opts.portNum = 'default';
     newElement = protocolWindowTemplate(opts);
     newElement = $(newElement).removeClass('js-protocol-window-template');
     $('.container').append(newElement);

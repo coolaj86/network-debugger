@@ -14,41 +14,51 @@ html(lang='en')
 
       span.js-all-templates.css-hidden
         .js-protocol-templates
-          li.js-protocol-tab-template.js-protocol-tab(data-protocol='')
-            a.js-tab(data-protocol='')
-          .js-protocol-window-template.js-protocol-window.css-inactive(data-protocol='')
-            .js-listener-tab-bar.css-tab-bar.css-hidden(data-protocol='')
-              li.js-listener-tab.css-listener-tab.css-default-tab(data-protocol='')(listener-port='default')
-                a.js-tab(data-protocol='')(listener-port='default')  +
-            .js-listener-container(data-protocol='')
-              .js-listener-window.css-listener-window(data-protocol='')(listener-port='default')
-                .js-listen-form.css-listen-form
-                  p Enter the port on which to listen
-                  input.js-portNum.css-input-port(type='text')(data-protocol='')
-                  a.js-open-listener.css-button(data-protocol='') Listen
-                .js-listener-stream.css-stream(data-protocol='')(listener-port='default')
-                a.css-button.js-clear(data-protocol='')(listener-port='default') Clear
+          li.js-protocol-tab-template.js-protocol-tab
+            a.js-tab
+            span.css-hidden
+          .js-protocol-window-template.js-protocol-window.css-inactive
+            .js-listener-tab-bar.css-tab-bar.css-hidden
+              li.js-listener-tab.css-listener-tab.css-default-tab
+                a.js-tab  +
+            .js-listener-container
+              .js-listener-window.css-listener-window
+                div.css-top
+                  span.js-listen-form.css-listen-form
+                    span Enter the port on which to listen
+                      input.js-portNum.css-input-port(type='text')
+                      a.js-open-listener.css-button Listen
+                .js-listener-stream.css-stream
+                div.css-bottom
+                  a.css-button.js-clear Clear
 
         .js-listener-templates
           li.js-listener-tab-template.js-listener-tab.css-listener-tab
-            a.js-tab(data-protocol='')(listener-port='')
-            span.js-close-listener-tab.css-close-tab(data-protocol='')(listener-port='') x
-          .js-listener-window-template.js-listener-window.css-listener-window(data-protocol='')(listener-port='')
-            .js-connection-info.css-connection-info
-              .js-connection-status.css-connection-status(data-protocol='')(listener-port='') Connection Status
-              a.js-close-listener.css-button(data-protocol='')(listener-port='') Close Connection
-            .js-logging-info.css-top.css-right
-              .js-logging-options
-                p Save packets separately
-                  input.js-separate-packets(type="checkbox")(data-protocol='')(listener-port='')
-                p.js-log-headers-display Save HTTP headers
-                  input.js-save-headers(type="checkbox")(data-protocol='')(listener-port='')
-              a.js-toggle-log.css-button.css-log(data-protocol='')(listener-port='')
-            .js-listener-stream.css-stream(data-protocol='')(listener-port='')
-            a.js-clear-stream.css-button(data-protocol='')(listener-port='') Clear
-            .js-scroll-info.css-bottom.css-right
-              p Lock scroll to bottom
-                input.js-scroll-lock(type="checkbox")(data-protocol='')(listener-port='')
+            a.js-tab
+            span.js-close-listener-tab.css-close-tab x
+          .js-listener-window-template.js-listener-window.css-listener-window
+            div.css-top
+              span.js-connection-info.css-connection-info
+                a.js-close-listener.css-button Close Connection
+                .js-connection-status.css-connection-status Connection Status
+              span.js-logging-info.css-logging-info
+                span.js-logging-options.css-logging-options
+                  div.js-separate-packets-display
+                    span Save packets separately
+                      input.js-separate-packets(type="checkbox")
+                  div.js-log-headers-display
+                    span Save HTTP headers
+                      input.js-save-headers(type="checkbox")
+                span
+                  a.js-toggle-log.css-button.css-log
+            .js-listener-stream.css-stream
+            div.css-bottom
+              span.css-left
+                a.js-clear-stream.css-button Clear
+              span.js-scroll-info.css-right
+                span Lock scroll to bottom
+                  input.js-scroll-lock(type="checkbox")
+            li.css-hidden
 
         .js-stream-templates
           span.js-message-template
