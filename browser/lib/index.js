@@ -18,6 +18,10 @@
     ;
 
   //EVENT LISTENERS ALL
+  $('body').delegate('.js-tab', 'click', function () {
+    tabCtrl.displayTab($(this).attr('data-protocol'), $(this).attr('listener-port'));
+  });
+
   $('.container').delegate('.js-open-listener', 'click', function () {
     var protocol = $(this).attr('data-protocol')
       , port = Number($('.js-portNum[data-protocol="'+protocol+'"]').val())
@@ -179,7 +183,7 @@
 
     if (validHash[0]) {
       setTimeout(function () {
-        window.location.hash = '#/' + validHash.join('/');
+        tabCtrl.displayTab.apply(tabCtrl, validHash);
       }, 50);
     }
   }

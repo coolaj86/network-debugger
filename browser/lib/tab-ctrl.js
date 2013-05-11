@@ -2,11 +2,12 @@
   "use strict";
 
   var $ = require('ender')
-    , url = require('url')
     , location = require('window').location
     , pure = require('./pure-inject')
     , serverCtrl = require('./server-ctrl')
     , streamCtrl = require('./stream-ctrl')
+    , firstProtocol
+    , initialTimeout
     , lvlSelectors = [
         {
           tab: '.js-protocol-tab',
@@ -22,39 +23,47 @@
     ;
 
   function displayTab() {
-    var resource = location.hash
-      , pathname
+    var args = Array.prototype.slice.call(arguments)
       , attrs = ''
+      , newHash = '#'
       ;
 
-    if (0 !== resource.indexOf('#/')) {
-      location.hash = '#/' + location.hash;
-      // we just change the hash so we should get this event again
-      return;
-    }
-
-    pathname = url.parse(resource.substr(2), true, true).pathname;
-    pathname.split('/').forEach(function (value, level) {
+    args.every(function (value, level) {
       var selectors = lvlSelectors[level]
+        , newAttr
         ;
 
       if (!selectors || !value) {
-        return;
+        return false;
+      }
+      newAttr = '['+selectors.attribute+'="'+value+'"]';
+      if ($(selectors.tab + attrs + newAttr).length <= 0) {
+        return false;
       }
 
+      newHash += '/'+value;
       // first deactivate all subcomponents of this part of the tree
       $(selectors.tab + attrs).removeClass('selected');
-      $(selectors.window + attrs).hide();
+      $(selectors.window + attrs).addClass('css-hidden');
 
-      // then specify which branch to enter now and activate it
-      attrs += '['+selectors.attribute+'="'+value+'"]';
+      // then specify which branch to enter now and activate it,
+      attrs += newAttr;
       $(selectors.tab + attrs).addClass('selected');
-      $(selectors.window + attrs).show();
+      $(selectors.window + attrs).removeClass('css-hidden');
+      clearTimeout(initialTimeout);
+      return true;
     });
+
+    location.hash = newHash;
   }
 
   function addProtocolTab(protocol) {
     pure.injectProtocolTab(protocol);
+
+    if (!firstProtocol) {
+      firstProtocol = protocol;
+      initialTimeout = setTimeout(displayTab, 100, firstProtocol);
+    }
   }
 
   function stateChange(protocol, port, open) {
@@ -131,13 +140,13 @@
     if (count === 0) {
       pure.injectListenerTab(protocol, port);
       count = $(selector).length;
-      location.hash = '#/'+protocol+'/'+port;
     }
     if (count !== 1) {
       // notify user
     }
-    updateListenerSettings(protocol, port, logSettings);
 
+    displayTab(protocol, port);
+    updateListenerSettings(protocol, port, logSettings);
     stateChange(protocol, port, true);
 
     options.active = true;
@@ -163,7 +172,7 @@
 
     // if the tab closed is the one we were on go to the default tab
     if (!$('.js-listener-window'+selector).hasClass('css-hidden')) {
-      location.hash = '#/'+protocol+'/default';
+      displayTab(protocol, 'default');
     }
     $('.js-listener-tab'+selector).remove();
     $('.js-listener-window'+selector).remove();
@@ -174,11 +183,10 @@
     }
   }
 
-  global.window.addEventListener('hashchange', displayTab);
-
   module.exports.addProtocolTab = addProtocolTab;
   module.exports.updateListenerSettings = updateListenerSettings;
   module.exports.addListenerTab = addListenerTab;
   module.exports.deactivateTab = deactivateTab;
   module.exports.closeListenerTab = closeListenerTab;
+  module.exports.displayTab = displayTab;
 }());

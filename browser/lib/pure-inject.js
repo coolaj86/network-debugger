@@ -27,16 +27,15 @@
 
   function compileTemplates() {
     protocolTabTemplate = pure('.js-protocol-tab-template').compile({
-      '@data-name': 'protocol',
       '@data-protocol': 'protocol',
-      'a@href': 'href',
+      'a@data-protocol': 'protocol',
       'a': 'display'
     });
     protocolWindowTemplate = pure('.js-protocol-window-template').compile({
       '@data-protocol': 'protocol',
       'div.js-listener-tab-bar@data-protocol': 'protocol',
       'div.js-listener-tab-bar li@data-protocol': 'protocol',
-      'div.js-listener-tab-bar li a@href': 'href',
+      'div.js-listener-tab-bar li a@data-protocol': 'protocol',
       'div.js-listener-container@data-protocol': 'protocol',
       'div.js-listener-container div.js-listener-window@data-protocol': 'protocol',
       'div.js-listener-container div.js-listener-window a@data-protocol': 'protocol',
@@ -46,7 +45,8 @@
 
     listenerTabTemplate = pure('.js-listener-tab-template').compile({
       'a': 'display',
-      'a@href': 'href',
+      'a@data-protocol': 'protocol',
+      'a@listener-port': 'portNum',
       '@data-protocol': 'protocol',
       '@listener-port': 'portNum',
       'span@data-protocol': 'protocol',
@@ -81,7 +81,6 @@
 
     opts.protocol = protocol;
     opts.display  = protocol.toUpperCase();
-    opts.href = '#/'+protocol+'/default';
 
     newElement = protocolTabTemplate(opts);
     newElement = $(newElement).removeClass('js-protocol-tab-template');
@@ -100,7 +99,6 @@
     opts.protocol = protocol;
     opts.portNum  = portNum;
     opts.display  = portNum;
-    opts.href = '#/'+protocol+'/'+portNum;
 
     newElement = listenerTabTemplate(opts);
     newElement = $(newElement).removeClass('js-listener-tab-template');

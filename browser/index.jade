@@ -15,11 +15,11 @@ html(lang='en')
       span.js-all-templates.css-hidden
         .js-protocol-templates
           li.js-protocol-tab-template.js-protocol-tab(data-protocol='')
-            a(href='')
+            a.js-tab(data-protocol='')
           .js-protocol-window-template.js-protocol-window.css-inactive(data-protocol='')
             .js-listener-tab-bar.css-tab-bar.css-hidden(data-protocol='')
               li.js-listener-tab.js-default.css-default(data-protocol='')(listener-port='default')
-                a(href='')  +
+                a.js-tab(data-protocol='')(listener-port='default')  +
             .js-listener-container.css-ui-tab-view(data-protocol='')
               .js-listener-window.css-tab-container(data-protocol='')(listener-port='default')
                 p.css-enter-port Enter the port on which to listen
@@ -31,7 +31,7 @@ html(lang='en')
 
         .js-listener-templates
           li.js-listener-tab-template.js-listener-tab
-            a(href='')
+            a.js-tab(data-protocol='')(listener-port='')
             span.js-close-listener-tab.css-close-tab(data-protocol='')(listener-port='') x
           .js-listener-window-template.js-listener-window.css-ui-tab-view(data-protocol='')(listener-port='')
             .js-connection-info.css-connection-info
