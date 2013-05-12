@@ -3,8 +3,6 @@
   "use strict";
   var $ = require('ender')
     , pure = require('./pure').$p
-    , messageTemplate
-    , codeTemplate
     , protocolTabTemplate
     , protocolWindowTemplate
     , listenerTabTemplate
@@ -31,17 +29,6 @@
     });
     protocolWindowTemplate = pure('.js-protocol-window-template').compile(directive);
     listenerWindowTemplate = pure('.js-listener-window-template').compile(directive);
-
-    messageTemplate = pure('.js-message-template').compile({
-      'div': 'time',
-      'span': 'body',
-      '@class': 'cssClass'
-    });
-    codeTemplate = pure('.js-code-template').compile({
-      'div': 'time',
-      'span': 'code',
-      'code': 'xml'
-    });
   }
 
   function injectProtocolTab(protocol) {
@@ -81,48 +68,7 @@
     $('.js-listener-container[data-protocol='+protocol+']').append(newElement);
   }
 
-  function injectMessage(options, data) {
-    var selector
-      ;
-
-    if (!options.hasOwnProperty('protocol')) {
-      console.error('received code injection request without protocol');
-      return;
-    }
-    if (!options.hasOwnProperty('port')) {
-      console.error('received code injection request without port');
-      return;
-    }
-    data = data || options;
-
-    selector  = '[data-protocol="' + options.protocol + '"]';
-    selector += '[listener-port="' + options.port + '"]';
-    data.time = new Date().toString();
-    $('.js-listener-stream' + selector).append(messageTemplate(data));
-  }
-
-  function injectCode(options, data) {
-    var selector
-      ;
-
-    if (!options.hasOwnProperty('protocol')) {
-      console.error('received code injection request without protocol');
-      return;
-    }
-    if (!options.hasOwnProperty('port')) {
-      console.error('received code injection request without port');
-      return;
-    }
-
-    selector  = '[data-protocol="' + options.protocol + '"]';
-    selector  = '[listener-port="' + options.port + '"]';
-    data.time = new Date().toString();
-    $('.js-listener-stream' + selector).append(codeTemplate(data));
-  }
-
   module.exports.compileTemplates = compileTemplates;
   module.exports.injectProtocolTab = injectProtocolTab;
-  module.exports.injectCode = injectCode;
-  module.exports.injectMessage = injectMessage;
   module.exports.injectListenerTab = injectListenerTab;
 }());

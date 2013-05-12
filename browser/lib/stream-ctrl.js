@@ -4,8 +4,42 @@
   var $ = require('ender')
     , hljs = require('hljs')
     , pd = require('pretty-data').pd
-    , pure = require('./pure-inject')
+    , pure = require('./pure').$p
+    , messageTemplate
+    , codeTemplate
     ;
+
+  function compileTemplates() {
+    messageTemplate = pure('.js-message-template').compile({
+      'div': 'time',
+      'span': 'body',
+      '@class': 'cssClass'
+    });
+    codeTemplate = pure('.js-code-template').compile({
+      'div': 'time',
+      'span': 'code',
+      'code': 'xml'
+    });
+  }
+
+  function injectCode(options, data) {
+    var selector
+      ;
+
+    if (!options.hasOwnProperty('protocol')) {
+      console.error('received code injection request without protocol');
+      return;
+    }
+    if (!options.hasOwnProperty('port')) {
+      console.error('received code injection request without port');
+      return;
+    }
+
+    selector  = '[data-protocol="' + options.protocol + '"]';
+    selector  = '[listener-port="' + options.port + '"]';
+    data.time = new Date().toString();
+    $('.js-listener-stream' + selector).append(codeTemplate(data));
+  }
 
   function syntaxHighlight(json) {
     json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -74,10 +108,10 @@
     var selector = ''
       ;
 
-    if (protocol !== 'all') {
+    if (protocol && protocol !== 'all') {
       selector += '[data-protocol="'+protocol+'"]';
     }
-    if (port !== 'all') {
+    if (port && port !== 'all') {
       selector += '[listener-port="'+port+'"]';
     }
 
@@ -100,19 +134,14 @@
     data.code = options.headers || '';
     data = processBody(options, data);
 
-    pure.injectCode(options, data);
+    injectCode(options, data);
     scrollLock(options.protocol, options.port);
     highlightMsg(options);
   }
 
-  function injectMessage(options, port) {
-    options.port = port;
-    pure.injectMessage(options);
-    scrollLock(options.protocol, port);
-  }
-
-  function clearStream(protocol, port) {
+  function injectMessage(protocol, port, msgOpts) {
     var selector = ''
+      , streams
       ;
 
     if (protocol !== 'all') {
@@ -122,8 +151,31 @@
       selector += '[listener-port="'+port+'"]';
     }
 
+    streams = $('.js-listener-stream' + selector);
+    if (streams.length < 1) {
+      console.error('injecting message into non-existant window', protocol, port);
+    }
+
+    msgOpts.time = new Date().toString();
+    streams.append(messageTemplate(msgOpts));
+    scrollLock(protocol, port);
+  }
+
+  function clearStream(protocol, port) {
+    var selector = ''
+      ;
+
+    if (protocol && protocol !== 'all') {
+      selector += '[data-protocol="'+protocol+'"]';
+    }
+    if (port && port !== 'all') {
+      selector += '[listener-port="'+port+'"]';
+    }
+
     $('.js-listener-stream'+selector).html('');
   }
+
+  $.domReady(compileTemplates);
 
   module.exports.preInjectCode = preInjectCode;
   module.exports.injectMessage = injectMessage;

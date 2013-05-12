@@ -157,13 +157,11 @@
     updateListenerSettings(protocol, port, logSettings);
     stateChange(protocol, port, true);
 
-    options.active = true;
     options.cssClass = 'css-streamNewConnection';
-    options.protocol = protocol;
     options.body = protocol.toUpperCase() + ' listener open on port ' + port;
 
-    streamCtrl.injectMessage(options, 'default');
-    streamCtrl.injectMessage(options, port);
+    streamCtrl.injectMessage(protocol, 'default', options);
+    streamCtrl.injectMessage(protocol, port, options);
   }
 
   function deactivateTab(protocol, port){

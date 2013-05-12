@@ -138,11 +138,10 @@
     socket.on('listenerClosed', function (msg) {
       var options = {};
 
-      options.body = msg.protocol.toUpperCase() + ' Listener on port ' + msg.port + ' closed';
+      options.body = msg.protocol.toUpperCase() + ' listener on port ' + msg.port + ' closed';
       options.cssClass = 'css-streamCloseConnection';
-      options.protocol = msg.protocol;
-      streamCtrl.injectMessage(options, 'default');
-      streamCtrl.injectMessage(options, msg.port);
+      streamCtrl.injectMessage(msg.protocol, 'default', options);
+      streamCtrl.injectMessage(msg.protocol, msg.port, options);
 
       tabCtrl.deactivateTab(msg.protocol, msg.port);
     });
@@ -152,12 +151,9 @@
 
       socketConnected = false;
 
-      console.log('Browser-Disconnected socket');
       options.cssClass = 'css-streamError';
       options.body = 'NetBug Server Down';
-      options.protocol = 'all';
-      streamCtrl.injectMessage(options, 'default');
-      options.active = false;
+      streamCtrl.injectMessage('all', 'all', options);
       tabCtrl.deactivateTab('all');
 
       $('.js-open-listener').addClass('disabled');
@@ -212,8 +208,8 @@
 
   $(document).ready(function () {
     var options = {};
-    options.protocol = 'all';
-    options.body = '';
+
+    options.cssClass = 'css-streamError';
 
     pure.compileTemplates();
 
@@ -224,27 +220,27 @@
     , error: function (err) {
         console.error('Server Error: ', err);
         options.body = 'Cannot communicate with netbug server';
-        options.cssClass = 'css-streamError';
-        streamCtrl.injectMessage(options, 'default');
+        streamCtrl.injectMessage('all', 'all', options);
       }
     , success: function (resp) {
         if (!resp.error && resp.result && !resp.result.error) {
           initBuild(resp);
         }
         else {
-          options.cssClass = 'css-streamError';
           if (resp.hasOwnProperty('result') && resp.result.hasOwnProperty('error')) {
-            options.body += resp.result.error;
+            options.body = resp.result.error;
+            streamCtrl.injectMessage('all', 'all', options);
           }
           if (Array.isArray(resp.errors)) {
             resp.errors.forEach(function (error) {
-              options.body += error.message;
+              options.body = error.message;
+              streamCtrl.injectMessage('all', 'all', options);
             });
           }
           if (!options.body) {
             options.body = 'Unknown error on page load';
+            streamCtrl.injectMessage('all', 'all', options);
           }
-          streamCtrl.injectMessage(options, 'default');
         }
       }
     });
