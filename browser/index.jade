@@ -11,6 +11,10 @@ html(lang='en')
         .css-title Network Debugger
         ul.js-protocol-tab-bar.css-tab-menu
       .css-container.container
+        .js-protocol-window.css-inactive(data-protocol='default')
+          .js-listener-container(data-protocol='default')
+            .js-listener-window.css-listener-window(data-protocol='default')(listener-port='default')
+              .js-listener-stream.css-stream(data-protocol='default')(listener-port='default')
 
       span.js-all-templates.css-hidden
         .js-protocol-templates
@@ -62,6 +66,8 @@ html(lang='en')
               span.js-scroll-info.css-right
                 p Lock scroll to bottom
                   input.js-scroll-lock.js-always-works(type="checkbox")
+            //- the li is just to make the listener template more like the protocol
+            //- template so we can use the same directive
             li.css-hidden
 
         .js-stream-templates

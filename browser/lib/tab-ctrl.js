@@ -66,12 +66,14 @@
   }
 
   function addProtocolTab(protocol) {
-    pure.injectProtocolTab(protocol);
-
     if (!firstProtocol) {
       firstProtocol = protocol;
       initialTimeout = setTimeout(displayTab, 100, firstProtocol);
+
+      $('.js-protocol-window[data-protocol="default"]').remove();
     }
+
+    pure.injectProtocolTab(protocol);
   }
 
   function stateChange(protocol, port, open) {
