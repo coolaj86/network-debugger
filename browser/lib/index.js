@@ -115,9 +115,9 @@
       }, 50);
     }
 
-    Object.keys(resp.result).forEach(function (protocol) {
-      if (Array.isArray(resp.result[protocol])) {
-        resp.result[protocol].forEach(function (listener) {
+    Object.keys(resp).forEach(function (protocol) {
+      if (Array.isArray(resp[protocol])) {
+        resp[protocol].forEach(function (listener) {
           listener.port = listener.port || listener.portNum;
           tabCtrl.addListenerTab(protocol, listener.port, listener.logSettings);
         });
@@ -208,10 +208,10 @@
       hash = [];
     }
 
-    openSocket(resp.result.socketPort);
+    openSocket(resp.socketPort);
 
-    Object.keys(resp.result).forEach(function (protocol) {
-      if (Array.isArray(resp.result[protocol])) {
+    Object.keys(resp).forEach(function (protocol) {
+      if (Array.isArray(resp[protocol])) {
         tabCtrl.addProtocolTab(protocol);
         if (hash[0] === protocol) {
           validHash[0] = protocol;
@@ -219,7 +219,7 @@
             validHash[1] = hash[1];
           }
         }
-        resp.result[protocol].forEach(function (listener) {
+        resp[protocol].forEach(function (listener) {
           listener.port = listener.port || listener.portNum;
           tabCtrl.addListenerTab(protocol, listener.port, listener.logSettings);
           if (hash[0] === protocol && hash[1] === listener.port.toString()) {

@@ -64,7 +64,7 @@
     }
     function success(resp) {
       if (resp.success && resp.result && !resp.result.error) {
-        cb(resp);
+        cb(resp.result);
       }
       else {
         cb();
