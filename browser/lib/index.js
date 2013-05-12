@@ -1,8 +1,3 @@
-/*jshint strict:true, browser:true, es5:true, onevar:true, laxcomma:true, laxbreak:true*/
-/*
- * BROWSER
- */
-
 (function () {
   "use strict";
   var $ = require('ender')

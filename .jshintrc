@@ -1,0 +1,17 @@
+{
+  "es5": true,
+  "strict": true,
+  "node": true,
+
+  "onevar": true,
+  "laxcomma": true,
+  "laxbreak": true,
+
+  "eqeqeq": true,
+  "immed": true,
+  "undef": true,
+  "unused": true,
+  "latedef": true,
+  "curly": true,
+  "trailing": true
+}
