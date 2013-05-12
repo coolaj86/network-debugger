@@ -238,6 +238,12 @@
 
   $.domReady(function () {
     pure.compileTemplates();
+    serverCtrl.getVersion(function (resp) {
+      if (resp) {
+        console.log(resp);
+        $('.js-version').html(resp.semver);
+      }
+    });
     serverCtrl.getAllListeners(initBuild);
   });
 

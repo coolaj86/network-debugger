@@ -54,8 +54,8 @@
     };
   }
 
-  function getAllListeners(cb) {
-    var handlers = createHandlers('all', 'all', 'acquire active listeners')
+  function getResource(cb, url, purpose) {
+    var handlers = createHandlers('all', 'all', purpose)
       ;
 
     function error() {
@@ -73,12 +73,20 @@
     }
 
     reqwest({
-        url: 'http://'+location.host+'/onPageLoad'
+        url: 'http://'+location.host+'/'+url
       , type: 'json'
       , method: 'get'
       , error: error
       , success: success
     });
+  }
+
+  function getVersion(cb) {
+    getResource(cb, 'version', 'acquire version');
+  }
+
+  function getAllListeners(cb) {
+    getResource(cb, 'onPageLoad', 'acquire active listeners');
   }
 
   function openListener(protocol, port) {
@@ -133,6 +141,7 @@
     });
   }
 
+  module.exports.getVersion = getVersion;
   module.exports.getAllListeners = getAllListeners;
   module.exports.openListener = openListener;
   module.exports.setListenerLogging = setListenerLogging;
