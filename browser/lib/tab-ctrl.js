@@ -41,17 +41,25 @@
         return false;
       }
 
-      newHash += '/'+value;
       // first deactivate all subcomponents of this part of the tree
-      $(selectors.tab + attrs).removeClass('selected');
+      $(selectors.tab + attrs).removeClass('tab-selected');
       $(selectors.window + attrs).addClass('css-hidden');
 
       // then specify which branch to enter now and activate it,
       attrs += newAttr;
-      $(selectors.tab + attrs).addClass('selected');
+      $(selectors.tab + attrs).addClass('tab-selected');
       $(selectors.window + attrs).removeClass('css-hidden');
       clearTimeout(initialTimeout);
       return true;
+    });
+
+    attrs = '';
+    lvlSelectors.forEach(function (selector) {
+      var value = $(selector.tab+'.tab-selected'+attrs).attr(selector.attribute)
+        ;
+
+      attrs += '['+selector.attribute+'="'+value+'"]';
+      newHash += '/'+value;
     });
 
     location.hash = newHash;

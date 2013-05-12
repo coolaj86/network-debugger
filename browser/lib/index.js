@@ -181,7 +181,7 @@
       }
     });
 
-    if (validHash[0]) {
+    if (validHash.length === hash.length) {
       setTimeout(function () {
         tabCtrl.displayTab.apply(tabCtrl, validHash);
       }, 50);
