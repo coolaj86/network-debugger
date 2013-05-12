@@ -229,7 +229,7 @@ body{
         float: right;
         margin: -2px 0px;
       }
-      input{
+      input[type=checkbox]{
         float: right;
         margin: 4px 10px;
       }
@@ -238,7 +238,7 @@ body{
       &:before{
         content: 'Start Log'
       }
-      &.activeLog:before{
+      &[option-active=true]:before{
         content: 'Stop Log';
       }
     }

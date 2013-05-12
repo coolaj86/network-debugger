@@ -25,10 +25,10 @@
 
   // event interceptor
   $('.container').on('click keypress', function (event) {
-    if (socketConnected) {
+    if ($(event.target).hasClass('js-always-works')) {
       return;
     }
-    if ($(event.target).hasClass('js-always-works')) {
+    if (socketConnected && !$(event.target).hasClass('disabled')) {
       return;
     }
     event.stopImmediatePropagation();
@@ -48,31 +48,12 @@
     }
   });
 
-  $('.container').delegate('.js-toggle-log', 'click', function () {
-    var protocol = $(this).attr('data-protocol')
-      , port = $(this).attr('listener-port')
-      , curState = $(this).hasClass('activeLog')
+  $('.container').delegate('.js-log-ctrl', 'click', function () {
+    var settings = {}
       ;
 
-    serverCtrl.setListenerLogging(protocol, port, {logData: !curState});
-  });
-  $('.container').delegate('.js-separate-packets', 'click', function () {
-    var protocol = $(this).attr('data-protocol')
-      , port = $(this).attr('listener-port')
-      , curState = $(this).attr('checked')
-      ;
-
-    // for the check boxes the state changes to was the user wants before we get the event
-    serverCtrl.setListenerLogging(protocol, port, {separateFiles: curState});
-  });
-  $('.container').delegate('.js-save-headers', 'click', function () {
-    var protocol = $(this).attr('data-protocol')
-      , port = $(this).attr('listener-port')
-      , curState = $(this).attr('checked')
-      ;
-
-    // for the check boxes the state changes to was the user wants before we get the event
-    serverCtrl.setListenerLogging(protocol, port, {includeHeaders: curState});
+    settings[$(this).attr('variable')] = !$(this).attr('checked');
+    serverCtrl.setListenerLogging($(this).attr('data-protocol'), $(this).attr('listener-port'), settings);
   });
 
   $('.container').delegate('.js-close-listener', 'click', function () {
@@ -240,7 +221,6 @@
     pure.compileTemplates();
     serverCtrl.getVersion(function (resp) {
       if (resp) {
-        console.log(resp);
         $('.js-version').html(resp.semver);
       }
     });

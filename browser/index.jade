@@ -52,14 +52,14 @@ html(lang='en')
                 .js-connection-status.css-connection-status Connection Status
               span.js-logging-info.css-logging-info
                 span.js-logging-options.css-logging-options
-                  div.js-separate-packets-display
+                  div.js-log-display(variable="separateFiles")
                     p Save packets separately
-                      input.js-separate-packets(type="checkbox")
-                  div.js-log-headers-display
+                      input.js-log-ctrl(type="checkbox")(variable="separateFiles")
+                  div.js-log-display(variable="includeHeaders")
                     p Save HTTP headers
-                      input.js-save-headers(type="checkbox")
-                span
-                  a.js-toggle-log.css-button.css-log
+                      input.js-log-ctrl(type="checkbox")(variable="includeHeaders")
+                span.js-log-display(variable="logData")
+                  a.js-log-ctrl.css-button.css-log(variable="logData")
             .js-listener-stream.css-stream
             div.css-bottom
               span.css-left

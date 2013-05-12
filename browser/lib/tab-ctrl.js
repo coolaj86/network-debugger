@@ -118,22 +118,13 @@
     selector += '[data-protocol="' + protocol + '"]';
     selector += '[listener-port="' + port + '"]';
 
-    if (logSettings.logData) {
-      $(selector).find('.js-toggle-log').addClass('activeLog');
-    }
-    else {
-      $(selector).find('.js-toggle-log').removeClass('activeLog');
-    }
+    $(selector).find('.js-log-display').hide();
 
-    if (logSettings.hasOwnProperty('includeHeaders')) {
-      $(selector).find('.js-log-headers-display').show();
-      $(selector).find('.js-save-headers').attr('checked', !!logSettings.includeHeaders);
-    }
-    else {
-      $(selector).find('.js-log-headers-display').hide();
-    }
-
-    $(selector).find('.js-separate-packets').attr('checked', !!logSettings.separateFiles);
+    Object.keys(logSettings).forEach(function (key) {
+      $(selector).find('.js-log-display[variable="'+key+'"]').show();
+      $(selector).find('.js-log-ctrl[variable="'+key+'"]').attr('checked', !!logSettings[key]);
+      $(selector).find('.js-log-ctrl[variable="'+key+'"]').attr('option-active', !!logSettings[key]);
+    });
   }
 
   function addListenerTab(protocol, port, logSettings) {

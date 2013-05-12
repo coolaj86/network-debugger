@@ -49,6 +49,13 @@
     $('.container').append(newElement);
   }
 
+  function preventDefault(event) {
+    // the check box changes the checked attribute immediately, so which
+    // it back to what it was before so we can handle the event our way
+    $(event.target).attr('checked', !$(event.target).attr('checked'));
+    event.preventDefault();
+  }
+
   function injectListenerTab(protocol, portNum) {
     var opts = {}
       , newElement
@@ -65,6 +72,7 @@
 
     newElement = listenerWindowTemplate(opts);
     newElement = $(newElement).removeClass('js-listener-window-template');
+    $(newElement).find('.js-logging-options').find('input[type="checkbox"]').on('click', preventDefault);
     $('.js-listener-container[data-protocol='+protocol+']').append(newElement);
   }
 
