@@ -29,7 +29,7 @@
       var knownErr = false;
       // If there wasn't an error, we will get the event listenerClosed,
       // which should trigger anything we would want to do on success
-      if (!resp.error && (!resp.result || !resp.result.error)) {
+      if (resp.success && (!resp.result || !resp.result.error)) {
         return;
       }
 
@@ -39,11 +39,11 @@
       }
       if (Array.isArray(resp.errors)) {
         resp.errors.forEach(function (error) {
-          reportError(error.message);
+          reportError(error.message || error.code);
           knownErr = true;
         });
       }
-      if (knownErr) {
+      if (!knownErr) {
         reportError('Unknown error trying to ' + purpose);
       }
     }
@@ -63,7 +63,7 @@
       handlers.error.apply(null, arguments);
     }
     function success(resp) {
-      if (!resp.error && resp.result && !resp.result.error) {
+      if (resp.success && resp.result && !resp.result.error) {
         cb(resp);
       }
       else {

@@ -114,12 +114,17 @@
       ;
 
     socket.on('connect', function () {
+      var options = {};
       socket.send('hi');
 
       if (socketConnected) {
         console.error('socket IO connected again without disconnecting');
       }
       else if (!initialConnect) {
+        options.cssClass = 'css-stream-message';
+        options.body = 'Reconnected to server';
+        streamCtrl.injectMessage('all', 'all', options);
+
         $('.js-open-listener').removeClass('disabled');
         $('.js-reopen-listener').removeClass('disabled');
         serverCtrl.getAllListeners(reloadListeners);
@@ -162,7 +167,7 @@
       socketConnected = false;
 
       options.cssClass = 'css-streamError';
-      options.body = 'NetBug Server Down';
+      options.body = 'Lost connection to the server';
       streamCtrl.injectMessage('all', 'all', options);
       tabCtrl.deactivateTab('all');
 
