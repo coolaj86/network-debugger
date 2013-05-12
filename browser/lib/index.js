@@ -15,13 +15,28 @@
     , tabCtrl = require('./tab-ctrl')
     , serverCtrl = require('./server-ctrl')
     , streamCtrl = require('./stream-ctrl')
+    , socketConnected = false
     ;
 
   //EVENT LISTENERS ALL
+
+  // tab navigation
   $('body').delegate('.js-tab', 'click', function () {
     tabCtrl.displayTab($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
 
+  // event interceptor
+  $('.container').on('click keypress', function (event) {
+    if (socketConnected) {
+      return;
+    }
+    if ($(event.target).hasClass('js-always-works')) {
+      return;
+    }
+    event.stopImmediatePropagation();
+  });
+
+  // listener control
   $('.container').delegate('.js-open-listener', 'click', function () {
     var protocol = $(this).attr('data-protocol')
       , port = Number($('.js-portNum[data-protocol="'+protocol+'"]').val())
@@ -33,16 +48,6 @@
     if (e.keyCode === 13) {
       serverCtrl.openListener($(this).attr('data-protocol'), Number($(this).val()));
     }
-  });
-
-  $('.container').delegate('.js-listener-stream pre', 'click', function () {
-    $(this).toggleClass('css-hl-block');
-  });
-  $('.container').delegate('.js-scroll-lock', 'change', function () {
-    streamCtrl.scrollLock($(this).attr('data-protocol'), $(this).attr('listener-port'));
-  });
-  $('.container').delegate('.js-clear-stream', 'click', function () {
-    streamCtrl.clearStream($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
 
   $('.container').delegate('.js-toggle-log', 'click', function () {
@@ -82,22 +87,36 @@
     tabCtrl.closeListenerTab($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
 
+  // stream visualization control
+  $('.container').delegate('.js-listener-stream pre', 'click', function () {
+    $(this).toggleClass('css-hl-block');
+  });
+  $('.container').delegate('.js-scroll-lock', 'change', function () {
+    streamCtrl.scrollLock($(this).attr('data-protocol'), $(this).attr('listener-port'));
+  });
+  $('.container').delegate('.js-clear-stream', 'click', function () {
+    streamCtrl.clearStream($(this).attr('data-protocol'), $(this).attr('listener-port'));
+  });
+
   //SOCKET COMMUNICATION WITH SERVER
   function openSocket(port) {
     var socket = io.connect('http://'+window.location.hostname+':'+port)
       , initialConnect = true
-      , reconnect = false
       ;
 
     socket.on('connect', function () {
       socket.send('hi');
 
-      if (reconnect) {
-        // reload information
-      }
-      else if (!initialConnect) {
+      if (socketConnected) {
         console.error('socket IO connected again without disconnecting');
       }
+      else if (!initialConnect) {
+        $('.js-open-listener').removeClass('disabled');
+        $('.js-reopen-listener').removeClass('disabled');
+      }
+
+      socketConnected = true;
+      initialConnect = false;
     });
 
     socket.on('listenerCreated', function (msg){
@@ -131,6 +150,8 @@
     socket.on('disconnect', function () {
       var options = {};
 
+      socketConnected = false;
+
       console.log('Browser-Disconnected socket');
       options.cssClass = 'css-streamError';
       options.body = 'NetBug Server Down';
@@ -139,7 +160,8 @@
       options.active = false;
       tabCtrl.deactivateTab('all');
 
-      reconnect = true;
+      $('.js-open-listener').addClass('disabled');
+      $('.js-reopen-listener').addClass('disabled');
     });
   }
 

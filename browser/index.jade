@@ -15,12 +15,12 @@ html(lang='en')
       span.js-all-templates.css-hidden
         .js-protocol-templates
           li.js-protocol-tab-template.js-protocol-tab
-            a.js-tab
+            a.js-tab.js-always-works
             span.css-hidden
           .js-protocol-window-template.js-protocol-window.css-inactive
             .js-listener-tab-bar.css-tab-bar.css-hidden
               li.js-listener-tab.tab-selected.css-listener-tab.css-default-tab
-                a.js-tab  +
+                a.js-tab.js-always-works  +
             .js-listener-container
               .js-listener-window.css-listener-window
                 div.css-top
@@ -31,14 +31,14 @@ html(lang='en')
                 .js-listener-stream.css-stream
                 div.css-bottom
                   span.css-left
-                    a.js-clear-stream.css-button Clear
+                    a.js-clear-stream.js-always-works.css-button Clear
                   span.js-scroll-info.css-right
                     span Lock scroll to bottom
-                      input.js-scroll-lock(type="checkbox")
+                      input.js-scroll-lock.js-always-works(type="checkbox")
 
         .js-listener-templates
           li.js-listener-tab-template.js-listener-tab.css-listener-tab
-            a.js-tab
+            a.js-tab.js-always-works
             span.js-close-listener-tab.css-close-tab x
           .js-listener-window-template.js-listener-window.css-listener-window
             div.css-top
@@ -58,10 +58,10 @@ html(lang='en')
             .js-listener-stream.css-stream
             div.css-bottom
               span.css-left
-                a.js-clear-stream.css-button Clear
+                a.js-clear-stream.js-always-works.css-button Clear
               span.js-scroll-info.css-right
                 span Lock scroll to bottom
-                  input.js-scroll-lock(type="checkbox")
+                  input.js-scroll-lock.js-always-works(type="checkbox")
             li.css-hidden
 
         .js-stream-templates
@@ -71,7 +71,7 @@ html(lang='en')
             br
           span.js-code-template
             .css-streamTime
-            pre
+            pre.js-always-works
               span
               code.highlight-me
 
