@@ -168,7 +168,7 @@
       options.cssClass = 'css-streamError';
       options.body = 'Lost connection to the server';
       streamCtrl.injectMessage('all', 'all', options);
-      tabCtrl.deactivateTab('all');
+      tabCtrl.deactivateTab('all', 'all');
 
       $('.js-open-listener').addClass('disabled');
       $('.js-reopen-listener').addClass('disabled');

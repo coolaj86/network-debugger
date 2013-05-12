@@ -83,6 +83,8 @@
 
     if (protocol !== 'all') {
       selector += '[data-protocol="' + protocol + '"]';
+    }
+    if (port !== 'all') {
       selector += '[listener-port="' + port + '"]';
     }
 
