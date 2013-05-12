@@ -7,9 +7,7 @@
   "use strict";
   var $ = require('ender')
     , url = require('url')
-    , reqwest = require('reqwest')
-    , window = require('window')
-    , document = window.document
+    , location = require('window').location
     , io = require('socket.io-browser')
     , pure = require('./pure-inject')
     , tabCtrl = require('./tab-ctrl')
@@ -98,9 +96,20 @@
     streamCtrl.clearStream($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
 
+  function reloadListeners(resp) {
+    Object.keys(resp.result).forEach(function (protocol) {
+      if (Array.isArray(resp.result[protocol])) {
+        resp.result[protocol].forEach(function (listener) {
+          listener.port = listener.port || listener.portNum;
+          tabCtrl.addListenerTab(protocol, listener.port, listener.logSettings);
+        });
+      }
+    });
+  }
+
   //SOCKET COMMUNICATION WITH SERVER
   function openSocket(port) {
-    var socket = io.connect('http://'+window.location.hostname+':'+port)
+    var socket = io.connect('http://'+location.hostname+':'+port)
       , initialConnect = true
       ;
 
@@ -113,6 +122,7 @@
       else if (!initialConnect) {
         $('.js-open-listener').removeClass('disabled');
         $('.js-reopen-listener').removeClass('disabled');
+        serverCtrl.getAllListeners(reloadListeners);
       }
 
       socketConnected = true;
@@ -162,12 +172,12 @@
   }
 
   function initBuild(resp) {
-    var hash= url.parse(window.location.hash.substr(2), true, true).pathname
+    // substring is to remove leading "#/" so we can process
+    // the hash as a pathname to remove anything we can't handle
+    var hash= url.parse(location.hash.substr(2), true, true).pathname
       , validHash = []
       ;
 
-    // substring is to remove leading "#/" so we can process
-    // the hash as a pathname to remove anything we can't handle
     if (hash) {
       hash = hash.split('/');
     }
@@ -175,10 +185,7 @@
       hash = [];
     }
 
-
     openSocket(resp.result.socketPort);
-    // delete the socket port to make sure it isn't interpretted as a protocol
-    delete resp.result.socketPort;
 
     Object.keys(resp.result).forEach(function (protocol) {
       if (Array.isArray(resp.result[protocol])) {
@@ -206,44 +213,9 @@
     }
   }
 
-  $(document).ready(function () {
-    var options = {};
-
-    options.cssClass = 'css-streamError';
-
+  $.domReady(function () {
     pure.compileTemplates();
-
-    reqwest({
-      url: 'http://'+window.location.host+'/onPageLoad'
-    , type: 'json'
-    , method: 'get'
-    , error: function (err) {
-        console.error('Server Error: ', err);
-        options.body = 'Cannot communicate with netbug server';
-        streamCtrl.injectMessage('all', 'all', options);
-      }
-    , success: function (resp) {
-        if (!resp.error && resp.result && !resp.result.error) {
-          initBuild(resp);
-        }
-        else {
-          if (resp.hasOwnProperty('result') && resp.result.hasOwnProperty('error')) {
-            options.body = resp.result.error;
-            streamCtrl.injectMessage('all', 'all', options);
-          }
-          if (Array.isArray(resp.errors)) {
-            resp.errors.forEach(function (error) {
-              options.body = error.message;
-              streamCtrl.injectMessage('all', 'all', options);
-            });
-          }
-          if (!options.body) {
-            options.body = 'Unknown error on page load';
-            streamCtrl.injectMessage('all', 'all', options);
-          }
-        }
-      }
-    });
+    serverCtrl.getAllListeners(initBuild);
   });
 
 }());

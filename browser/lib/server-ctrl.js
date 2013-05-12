@@ -54,6 +54,33 @@
     };
   }
 
+  function getAllListeners(cb) {
+    var handlers = createHandlers('all', 'all', 'acquire active listeners')
+      ;
+
+    function error() {
+      cb();
+      handlers.error.apply(null, arguments);
+    }
+    function success(resp) {
+      if (!resp.error && resp.result && !resp.result.error) {
+        cb(resp);
+      }
+      else {
+        cb();
+        handlers.success.apply(null, arguments);
+      }
+    }
+
+    reqwest({
+        url: 'http://'+location.host+'/onPageLoad'
+      , type: 'json'
+      , method: 'get'
+      , error: error
+      , success: success
+    });
+  }
+
   function openListener(protocol, port) {
     var purpose = 'open ' + protocol.toUpperCase() + ' listener on port ' + port
       , handlers = createHandlers(protocol, null, purpose)
@@ -106,6 +133,7 @@
     });
   }
 
+  module.exports.getAllListeners = getAllListeners;
   module.exports.openListener = openListener;
   module.exports.setListenerLogging = setListenerLogging;
   module.exports.closeListener = closeListener;
