@@ -164,12 +164,23 @@ body{
 }
 .css-listener-window{
   padding: 20px;
-  p{
-    display: inline;
+  span{
     font-size: 15px;
     color: rgb(204, 204, 204);
-    -webkit-margin-before: 0px;
-    -webkit-margin-after: 4px;
+  }
+  .css-top{
+    &:after{
+      content: " ";
+      display: block;
+      clear: both;
+    }
+  }
+  .css-bottom{
+    &:after{
+      content: " ";
+      display: block;
+      clear: both;
+    }
   }
   .css-listen-form{
     float: left;
@@ -182,42 +193,59 @@ body{
       text-align: right;
     }
   }
-  .css-log{
-    &:before{
-      content: 'Start Log'
+  .css-connection-info{
+    float: left;
+    padding-top: 4px;
+    font-size: 15px;
+    color: #111;
+    .css-connection-status{
+      float: right;
+      margin-left: 15px;
+      border-radius: 120px;
+      padding: 1px 10px;
+      box-shadow: inset 0px 0px 10px 4px rgb(100, 102, 91);
+      -webkit-transition: background .3s linear;
     }
-    &.activeLog:before{
-      content: 'Stop Log';
+    .css-connection-count{
+      padding: 0px 4px;
     }
   }
-  .css-log-options{
-    float: right;
-    margin-top: -4px;
-    p, input{
-      float: right;
-      -webkit-margin-after: 4px;
+  .css-logging-info{
+    float:right;
+    .css-logging-options{
+      float: left;
+      max-width: 300px;
+      padding: 0px 10px;
+      margin: 2px 0px;
+      div{
+        float: right;
+        margin: -2px 0px;
+      }
+      input{
+        float: right;
+        margin: 4px 10px;
+      }
     }
-    input{
-      margin: 4px 10px;
+    .css-log{
+      &:before{
+        content: 'Start Log'
+      }
+      &.activeLog:before{
+        content: 'Stop Log';
+      }
     }
   }
   &.css-active{
-    .css-openSocket{
-      .disabled
-    }
     .css-connection-status{
-      background: -webkit-radial-gradient(center, ellipse cover, green 23%, #64665B 100%);
+      background: -webkit-radial-gradient(center, ellipse cover, rgb(0, 128, 0) 23%, rgb(100, 102, 91) 100%);
     }
   }
   &.css-inactive{
     .css-log{
       .disabled
     }
-    .css-closeSocket{
-      .disabled
-    }
     .css-connection-status{
-      background: -webkit-radial-gradient(center, ellipse cover, #AA3636 23%, #64665B 100%);
+      background: -webkit-radial-gradient(center, ellipse cover, rgb(170, 54, 54) 23%, rgb(100, 102, 91) 100%);
     }
   }
 }
@@ -268,7 +296,7 @@ body{
   }
   .css-streamCloseConnection{
     color: lightGray;
-    box-shadow: 0px 4px 12px -7px red; 
+    box-shadow: 0px 4px 12px -7px red;
   }
   pre{
     -webkit-transition-property: background, border, padding;
@@ -289,55 +317,11 @@ body{
   }
 }
 
-.css-connection-info{
-  float: left;
-  padding-top: 4px;
-  font-size: 15px;
-  color: #111;
-  position: relative;
-  top: -10px;
-  div{
-    float: left;
-    position: relative;
-    top: 2px;
-  }
-  .css-connection-status{
-    border-radius: 120px;
-    padding: 1px 10px;
-    box-shadow: inset 0px 0px 10px 4px #64665B;
-    -webkit-transition: background .3s linear;
-  }
-  .css-connection-count{
-    padding: 0px 4px;
-  }
+.css-right{
+  float: right;
 }
-.css-bottom{
+.css-left{
   float: left;
-  width:173px;
-  p{
-    float: left;
-    position: relative;
-  }
-  input{
-    float: right;
-  }
-  &.css-right{
-    float:right;
-  }
-}
-.css-top{
-  &.right{
-    float:right;
-    margin-top: -5px;
-    margin-right: 10px;
-    p{
-      float: left;
-      -webkit-margin-after: 0;
-    }
-    input{
-      margin: 2px 15px 0px 10px;
-    }
-  }
 }
 
 @font-face {

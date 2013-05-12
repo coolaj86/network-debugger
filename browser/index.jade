@@ -25,12 +25,16 @@ html(lang='en')
               .js-listener-window.css-listener-window
                 div.css-top
                   span.js-listen-form.css-listen-form
+                    a.js-open-listener.css-button Listen
+                    input.js-portNum.css-input-port(type='text')
                     span Enter the port on which to listen
-                      input.js-portNum.css-input-port(type='text')
-                      a.js-open-listener.css-button Listen
                 .js-listener-stream.css-stream
                 div.css-bottom
-                  a.css-button.js-clear Clear
+                  span.css-left
+                    a.js-clear-stream.css-button Clear
+                  span.js-scroll-info.css-right
+                    span Lock scroll to bottom
+                      input.js-scroll-lock(type="checkbox")
 
         .js-listener-templates
           li.js-listener-tab-template.js-listener-tab.css-listener-tab
