@@ -97,6 +97,24 @@
   });
 
   function reloadListeners(resp) {
+    // substring is to remove leading "#/" so we can process
+    // the hash as a pathname to remove anything we can't handle
+    var hash= url.parse(location.hash.substr(2), true, true).pathname
+      ;
+
+    if (hash) {
+      hash = hash.split('/');
+    }
+    else {
+      hash = [];
+    }
+
+    if (hash.length >= 2) {
+      setTimeout(function () {
+        tabCtrl.displayTab.apply(tabCtrl, hash);
+      }, 50);
+    }
+
     Object.keys(resp.result).forEach(function (protocol) {
       if (Array.isArray(resp.result[protocol])) {
         resp.result[protocol].forEach(function (listener) {
