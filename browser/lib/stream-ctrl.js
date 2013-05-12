@@ -2,7 +2,6 @@
   "use strict";
 
   var $ = require('ender')
-    , hljs = require('hljs')
     , pd = require('pretty-data').pd
     , pure = require('./pure').$p
     , messageTemplate
@@ -20,25 +19,6 @@
       'span': 'code',
       'code': 'xml'
     });
-  }
-
-  function injectCode(options, data) {
-    var selector
-      ;
-
-    if (!options.hasOwnProperty('protocol')) {
-      console.error('received code injection request without protocol');
-      return;
-    }
-    if (!options.hasOwnProperty('port')) {
-      console.error('received code injection request without port');
-      return;
-    }
-
-    selector  = '[data-protocol="' + options.protocol + '"]';
-    selector  = '[listener-port="' + options.port + '"]';
-    data.time = new Date().toString();
-    $('.js-listener-stream' + selector).append(codeTemplate(data));
   }
 
   function syntaxHighlight(json) {
@@ -61,22 +41,17 @@
     });
   }
 
-  function highlightMsg(options) {
-    $('.js-'+options.protocol+'-stream .highlight-me').forEach(function(el) {
-      hljs.highlightBlock(el);
-      $(el).removeClass('highlight-me');
-    });
-  }
-
-  function processBody(options, data) {
-    var xml
+  function processPacket(options) {
+    var data = {code: ''}
+      , xml
       , xml_pp
       , json_pp
       ;
 
-    if (!data) {
-      data = {};
+    if (options && options.headers) {
+      data.code += options.headers;
     }
+
     if (!options || !options.hasOwnProperty('body')) {
       console.error('options has no body:', JSON.stringify(options));
       data.code += 'No Body';
@@ -129,14 +104,24 @@
     });
   }
 
-  function preInjectCode(options) {
-    var data = {};
-    data.code = options.headers || '';
-    data = processBody(options, data);
+  function injectCode(protocol, port, codeOpts) {
+    var selector = '[data-protocol="'+protocol+'"][listener-port="'+port+'"]'
+      , streams
+      , data
+      ;
 
-    injectCode(options, data);
-    scrollLock(options.protocol, options.port);
-    highlightMsg(options);
+    streams = $('.js-listener-stream' + selector);
+    if (streams.length < 1) {
+      console.error('injecting code into non-existant window', protocol, port);
+    }
+    if (streams.length > 1) {
+      console.error('injecting code into multiple windows', protocol, port);
+    }
+
+    data = processPacket(codeOpts);
+    data.time = new Date().toString();
+    streams.append(codeTemplate(data));
+    scrollLock(protocol, port);
   }
 
   function injectMessage(protocol, port, msgOpts) {
@@ -177,8 +162,8 @@
 
   $.domReady(compileTemplates);
 
-  module.exports.preInjectCode = preInjectCode;
   module.exports.injectMessage = injectMessage;
+  module.exports.injectCode    = injectCode;
   module.exports.scrollLock    = scrollLock;
   module.exports.clearStream   = clearStream;
 }());

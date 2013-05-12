@@ -127,7 +127,7 @@
     });
 
     socket.on('listenerData', function (msg) {
-      streamCtrl.preInjectCode(msg);
+      streamCtrl.injectCode(msg.protocol, msg.port, msg);
     });
 
     //socket.on('connectionChange', function (msg) {
