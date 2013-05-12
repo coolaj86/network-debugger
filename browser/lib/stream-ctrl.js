@@ -71,15 +71,28 @@
   }
 
   function scrollLock(protocol, port) {
-    var selector = '[data-protocol="'+protocol+'"][listener-port="'+port+'"]'
+    var selector = ''
       ;
 
-    while ($('.js-listener-stream'+selector).children().length > 9) {
-      $('.js-listener-stream'+selector).first().remove();
+    if (protocol !== 'all') {
+      selector += '[data-protocol="'+protocol+'"]';
     }
-    if ($('.js-scroll-lock'+selector).attr('checked') && $('.js-listener-stream'+selector)[0].scrollHeight !== 0) {
-      $('.js-listener-stream'+selector)[0].scrollTop = $('.js-listener-stream'+selector)[0].scrollHeight;
+    if (port !== 'all') {
+      selector += '[listener-port="'+port+'"]';
     }
+
+    $('.js-listener-stream'+selector).forEach(function (stream) {
+      var subSelector = ''
+        ;
+      subSelector += '[data-protocol="'+$(stream).attr('data-protocol')+'"]';
+      subSelector += '[listener-port="'+$(stream).attr('listener-port')+'"]';
+      while (stream.scrollHeight > 3000 && $(stream).children().length > 5) {
+        $(stream).children().first().remove();
+      }
+      if ($('.js-scroll-lock'+subSelector).attr('checked') && stream.scrollHeight !== 0) {
+        stream.scrollTop = stream.scrollHeight;
+      }
+    });
   }
 
   function preInjectCode(options) {
@@ -99,13 +112,21 @@
   }
 
   function clearStream(protocol, port) {
-    var selector = '[data-protocol="'+protocol+'"][listener-port="'+port+'"]'
+    var selector = ''
       ;
+
+    if (protocol !== 'all') {
+      selector += '[data-protocol="'+protocol+'"]';
+    }
+    if (port !== 'all') {
+      selector += '[listener-port="'+port+'"]';
+    }
 
     $('.js-listener-stream'+selector).html('');
   }
 
   module.exports.preInjectCode = preInjectCode;
   module.exports.injectMessage = injectMessage;
+  module.exports.scrollLock    = scrollLock;
   module.exports.clearStream   = clearStream;
 }());

@@ -38,10 +38,10 @@
   $('.container').delegate('.js-listener-stream pre', 'click', function () {
     $(this).toggleClass('css-hl-block');
   });
-  $('.container').delegate('.js-scroll', 'change', function () {
+  $('.container').delegate('.js-scroll-lock', 'change', function () {
     streamCtrl.scrollLock($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
-  $('.container').delegate('.js-clear', 'click', function () {
+  $('.container').delegate('.js-clear-stream', 'click', function () {
     streamCtrl.clearStream($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
 
