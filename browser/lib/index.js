@@ -2,7 +2,8 @@
   "use strict";
   var $ = require('ender')
     , url = require('url')
-    , location = require('window').location
+    , window = require('window')
+    , location = window.location
     , io = require('socket.io-browser')
     , pure = require('./pure-inject')
     , tabCtrl = require('./tab-ctrl')
@@ -12,6 +13,15 @@
     ;
 
   //EVENT LISTENERS ALL
+  //window sizing
+  $(window).on('resize', function () {
+    var current = $('body').height()
+      , target = window.innerHeight - 50
+      , streamSize = $('.css-stream').height()
+      ;
+
+    $('.css-stream').height(streamSize + (target-current));
+  });
 
   // tab navigation
   $('body').delegate('.js-tab', 'click', function () {
