@@ -17,8 +17,17 @@
   $(window).on('resize', function () {
     var current = $('body').height()
       , target = window.innerHeight - 50
-      , streamSize = $('.css-stream').height()
+      , streamSize = 0
       ;
+
+    // the streams should all be the same height, but it case
+    // they aren't find the biggest, assume they are all the same,
+    // and then make them all the same.
+    $('.css-stream').forEach(function (stream) {
+      if ($(stream).height() > streamSize) {
+        streamSize = $(stream).height();
+      }
+    });
 
     $('.css-stream').height(streamSize + (target-current));
   });

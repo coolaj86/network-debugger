@@ -2,7 +2,7 @@
   "use strict";
 
   var $ = require('ender')
-    , location = require('window').location
+    , window = require('window')
     , pure = require('./pure-inject')
     , serverCtrl = require('./server-ctrl')
     , streamCtrl = require('./stream-ctrl')
@@ -62,7 +62,8 @@
       newHash += '/'+value;
     });
 
-    location.hash = newHash;
+    window.location.hash = newHash;
+    $(window).trigger('resize');
   }
 
   function addProtocolTab(protocol) {
