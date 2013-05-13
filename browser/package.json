@@ -18,6 +18,7 @@
     "qwery": "3.x",
 
     "reqwest": "0.6.x",
+    "pure": "2.x",
     "pretty-data": "0.30.x",
     "url": "0.7.x",
     "socket.io-browser": "0.8.x"

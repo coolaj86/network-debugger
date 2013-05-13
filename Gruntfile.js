@@ -62,7 +62,7 @@
           tasks: ['jade']
         },
         scripts: {
-          files: ['browser/**/*.js'],
+          files: ['browser/**/*.js', 'browser/package.json'],
           tasks: ['pakmanager']
         }
       }

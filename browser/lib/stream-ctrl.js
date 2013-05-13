@@ -3,7 +3,7 @@
 
   var $ = require('ender')
     , pd = require('pretty-data').pd
-    , pure = require('./pure').$p
+    , pure = require('pure').$p
     , messageTemplate
     , codeTemplate
     ;

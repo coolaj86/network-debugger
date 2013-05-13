@@ -1,7 +1,7 @@
 (function () {
   "use strict";
   var $ = require('ender')
-    , pure = require('./pure').$p
+    , pure = require('pure').$p
     , protocolTabTemplate
     , protocolWindowTemplate
     , listenerTabTemplate
