@@ -95,11 +95,9 @@
       hash = [];
     }
 
-    if (hash.length >= 2) {
-      setTimeout(function () {
-        tabCtrl.displayTab.apply(tabCtrl, hash);
-      }, 50);
-    }
+    setTimeout(function () {
+      tabCtrl.displayTab.apply(tabCtrl, hash);
+    }, 25);
 
     Object.keys(resp).forEach(function (protocol) {
       if (Array.isArray(resp[protocol])) {
@@ -218,7 +216,7 @@
     if (validHash.length === hash.length) {
       setTimeout(function () {
         tabCtrl.displayTab.apply(tabCtrl, validHash);
-      }, 50);
+      }, 25);
     }
   }
 
