@@ -1,3 +1,11 @@
+--v2.1.1 May 2013
+major internal UI rework
+more fluid tab navigation
+tab location preserved on refresh
+disconnect/reconnect from server handled better
+page adjusts with window size
+more usable in firefox (still doesn't look as good though)
+
 --v2.1.0 May 2013
 added support for HTTPS
 added a proper argument parser
