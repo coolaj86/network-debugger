@@ -1,103 +1,81 @@
-/*jshint strict:true, browser:true, es5:true, onevar:true, laxcomma:true, laxbreak:true*/
 (function () {
   "use strict";
-  var ender = require('ender')
-    , $ = ender
-    , pure = require('./pure').$p
-    , messageDir
-    , messageTemplate
-    , codeDir
-    , codeTemplate
-    , timestampDir
-    , timestampTemplate
-    , tabDir
-    , tabTemplate
-    , tabContainerDir
-    , tabContainerTemplate
+  var $ = require('ender')
+    , pure = require('pure').$p
+    , protocolTabTemplate
+    , protocolWindowTemplate
+    , listenerTabTemplate
+    , listenerWindowTemplate
     ;
 
-  messageDir = {
-    'span': 'body',
-    '@class': 'cssClass'
-  };
-  codeDir = {
-    'span': 'code',
-    'code': 'xml'
-  };
-  timestampDir = {
-    'div': 'time'
-  };
-  tabDir = {
-    'li@class+': 'class',
-    'li@data-protocol': 'protocol',
-    'a@href': 'tabLink',
-    'a': 'portNum'
-  };
-  /*tabContainerDir = {
-    'div.js-ui-tab-view@data-name': 'port-num',
-    '.js-ui-tab-view .css-listen-form .js-port-num@class': 'class-protocol',
-    //'.js-ui-tab-view .css-listen-form span.js-port-num@data-protocol': 'protocol',
-    //'.js-ui-tab-view .css-listen-form .js-port-num': 'port-num',
-    //'a.js-log@class': 'class-protocol',
-    'a.js-log@data-protocol': 'protocol',
-    //'div.js-closeSocket@class': 'class-protocol',
-    'div.js-closeSocket@data-protocol': 'protocol',
-    'div.js-clear@class': 'class-protocol',
-    'div.js-clear@data-protocol': 'protocol',
-    'div.js-scroll@class': 'class-protocol',
-    'div.js-scroll@data-protocol': 'protocol'
-  };*/
+  function compileTemplates() {
+    var directive = {}
+      ;
 
-  timestampTemplate = pure('.js-timestamp-template').compile(timestampDir);
-  messageTemplate = pure('.js-message-template').compile(messageDir);
-  codeTemplate = pure('.js-code-template').compile(codeDir);
-  tabTemplate = pure('.js-tab-template').compile(tabDir);
-  //tabContainerTemplate = pure('.js-tab-container-template').compile(tabContainerDir);
+    directive.a = 'display';
+    ['', 'a', 'span'].forEach(function (type) {
+      directive[type+'@data-protocol'] = 'protocol';
+      directive[type+'@listener-port'] = 'portNum';
+    });
 
-  function injectMessage(options, data) {
+    protocolTabTemplate = pure('.js-protocol-tab-template').compile(directive);
+    listenerTabTemplate = pure('.js-listener-tab-template').compile(directive);
 
-    var stream;
-
-    if (!options.hasOwnProperty('protocol')) {
-      console.error('received code injection request without protocol');
-      return;
-    }
-    if (!options.hasOwnProperty('port')) {
-      console.error('received code injection request without port');
-      return;
-    }
-    data = data || options;
-
-    stream = $('.js-ui-tab-view[data-name="'+options.port+'"] .js-'+options.protocol+'-stream');
-    stream.append(addTime() + messageTemplate(data));
+    delete directive.a;
+    ['div', 'input', 'li'].forEach(function (type) {
+      directive[type+'@data-protocol'] = 'protocol';
+      directive[type+'@listener-port'] = 'portNum';
+    });
+    protocolWindowTemplate = pure('.js-protocol-window-template').compile(directive);
+    listenerWindowTemplate = pure('.js-listener-window-template').compile(directive);
   }
 
-  function injectCode(options, data) {
-    var stream;
+  function injectProtocolTab(protocol) {
+    var opts = {}
+      , newElement
+      ;
 
-    if (!options.hasOwnProperty('protocol')) {
-      console.error('received code injection request without protocol');
-      return;
-    }
-    if (!options.hasOwnProperty('port')) {
-      console.error('received code injection request without port');
-      return;
-    }
+    opts.protocol = protocol;
+    opts.display  = protocol.toUpperCase();
 
-    stream = $('.js-ui-tab-view[data-name="'+options.port+'"] .js-'+options.protocol+'-stream');
-    stream.append(addTime() + codeTemplate(data));
+    newElement = protocolTabTemplate(opts);
+    newElement = $(newElement).removeClass('js-protocol-tab-template');
+    $('.js-protocol-tab-bar').append(newElement);
+
+    opts.portNum = 'default';
+    newElement = protocolWindowTemplate(opts);
+    newElement = $(newElement).removeClass('js-protocol-window-template');
+    $('.container').append(newElement);
   }
 
-  function addTime () {
-    return timestampTemplate({'time': new Date().toString()});
-  }
-  function injectNewTab(tab, container){
-    $('.js-ui-tab-view[data-name='+tab.protocol+'] '+'.js-tab-bar').append(tabTemplate(tab));
-    //console.log(container);
-    //$('.js-ui-tab-view[data-name='+tab.protocol+'] '+'.js-tab-container').append(tabContainerTemplate(container));
+  function preventDefault(event) {
+    // the check box changes the checked attribute immediately, so which
+    // it back to what it was before so we can handle the event our way
+    $(event.target).attr('checked', !$(event.target).attr('checked'));
+    event.preventDefault();
   }
 
-  module.exports.injectCode = injectCode;
-  module.exports.injectMessage = injectMessage;
-  module.exports.injectNewTab = injectNewTab;
+  function injectListenerTab(protocol, portNum) {
+    var opts = {}
+      , newElement
+      ;
+
+    opts.protocol = protocol;
+    opts.portNum  = portNum;
+    opts.display  = portNum;
+
+    newElement = listenerTabTemplate(opts);
+    newElement = $(newElement).removeClass('js-listener-tab-template');
+    $('.js-listener-tab-bar[data-protocol='+protocol+']').append(newElement);
+    $('.js-listener-tab-bar[data-protocol='+protocol+']').removeClass('css-hidden');
+
+    newElement = listenerWindowTemplate(opts);
+    newElement = $(newElement).removeClass('js-listener-window-template');
+    $(newElement).find('.js-logging-options').find('input[type="checkbox"]').on('click', preventDefault);
+    $('.js-listener-container[data-protocol='+protocol+']').append(newElement);
+  }
+
+  module.exports.compileTemplates = compileTemplates;
+  module.exports.injectProtocolTab = injectProtocolTab;
+  module.exports.injectListenerTab = injectListenerTab;
 }());

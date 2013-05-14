@@ -9,113 +9,78 @@ html(lang='en')
         .css-logo
           img(src='images/spotterrf-labs-white-logo.png', alt='')
         .css-title Network Debugger
-        ul.css-tab-menu
-          li.js-ui-tab.js-https(data-protocol='https')
-            a(href='/https/default') HTTPS
-          li.js-ui-tab.js-http(data-protocol='http')
-            a(href='/http/default') HTTP
-          li.js-ui-tab.js-tcp(data-protocol='tcp')
-            a(href='/tcp/default') TCP
-          li.js-ui-tab.js-udp(data-protocol='udp')
-            a(href='/udp/default') UDP
+        .js-version.css-version
+        ul.js-protocol-tab-bar.css-tab-menu
       .css-container.container
-        .js-ui-tab-view.js-all.css-inactive(data-name='tcp')
-          .css-tab-bar.js-tab-bar
-            li.js-ui-tab.js-default.css-default.css-hidden(data-protocol="tcp")
-              a(href='/tcp/default')  +
-          .js-ui-tab-view.css-ui-tab-view(data-name='default')
-            p.css-enter-port Enter the port to listen on and click 'Listen'
-            .css-listen-form
-              input.js-portNum.js-tcp.css-portNum(type='text')(data-protocol='tcp')
-              a.css-button.css-openSocket.js-openSocket.js-tcp(data-protocol='tcp') Listen
-            .js-tcp-stream.js-all-stream.css-stream
-              span.js-allstream-error
-            a.css-button.js-clear.js-tcp(data-protocol='tcp') Clear
-          .css-tab-container.js-tab-container
-
-        .js-ui-tab-view.js-all.css-inactive(data-name='https')
-          .css-tab-bar.js-tab-bar
-            li.js-ui-tab.js-default.css-default.css-hidden(data-protocol="https")
-              a(href='/https/default')  +
-          .js-ui-tab-view.css-ui-tab-view(data-name='default')
-            p.css-enter-port Enter the port to listen on and click 'Listen'
-            .css-listen-form
-              input.js-portNum.js-https.css-portNum(type='text')(data-protocol='https')
-              a.css-button.css-openSocket.js-openSocket.js-https(data-protocol='https') Listen
-            .js-https-stream.js-all-stream.css-stream
-              span.js-allstream-error
-            a.css-button.js-clear.js-https(data-protocol='https') Clear
-          .css-tab-container.js-tab-container
-
-        .js-ui-tab-view.js-all.css-inactive(data-name='http')
-          .css-tab-bar.js-tab-bar
-            li.js-ui-tab.js-default.css-default.css-hidden(data-protocol="http")
-              a(href='/http/default')  +
-          .js-ui-tab-view.css-ui-tab-view(data-name='default')
-            p.css-enter-port Enter the port to listen on and click 'Listen'
-            .css-listen-form
-              input.js-portNum.js-http.css-portNum(type='text')(data-protocol='http')
-              a.css-button.css-openSocket.js-openSocket.js-http(data-protocol='http') Listen
-            .js-http-stream.js-all-stream.css-stream
-              span.js-allstream-error
-            a.css-button.js-clear.js-http(data-protocol='http') Clear
-          .css-tab-container.js-tab-container
-
-        .js-ui-tab-view.js-all.css-inactive(data-name='udp')
-          .css-tab-bar.js-tab-bar
-            li.js-ui-tab.js-default.css-default.css-hidden(data-protocol="udp")
-              a(href='/udp/default')  +
-          .js-ui-tab-view.css-ui-tab-view(data-name='default')
-            p.css-enter-port Enter the port to listen on and click 'Listen'
-            .css-listen-form
-              input.js-portNum.js-udp.css-portNum(type='text')(data-protocol='udp')
-              a.css-button.css-openSocket.js-openSocket.js-udp(data-protocol='udp') Listen
-            .js-udp-stream.js-all-stream.css-stream
-              span.js-allstream-error
-            a.css-button.js-clear.js-udp(data-protocol='udp') Clear
-          .css-tab-container.js-tab-container
+        .js-protocol-window.css-inactive(data-protocol='default')
+          .js-listener-container(data-protocol='default')
+            .js-listener-window.css-listener-window(data-protocol='default')(listener-port='default')
+              .js-listener-stream.css-stream(data-protocol='default')(listener-port='default')
 
       span.js-all-templates.css-hidden
-        span.js-message-template
-          span
-          br
-        span.js-timestamp-template
-          .css-streamTime
-        span.js-code-template
-          pre
+        .js-protocol-templates
+          li.js-protocol-tab-template.js-protocol-tab
+            a.js-tab.js-always-works
+            span.css-hidden
+          .js-protocol-window-template.js-protocol-window.css-hidden
+            .js-listener-tab-bar.css-tab-bar.css-hidden
+              li.js-listener-tab.tab-selected.css-listener-tab.css-default-tab
+                a.js-tab.js-always-works  +
+            .js-listener-container
+              .js-listener-window.css-listener-window
+                div.css-top
+                  span.js-listen-form.css-listen-form
+                    a.js-open-listener.css-button Listen
+                    input.js-portNum.css-input-port(type='text')
+                    p Enter the port on which to listen
+                .js-listener-stream.css-stream
+                div.css-bottom
+                  span.css-left
+                    a.js-clear-stream.js-always-works.css-button Clear
+                  span.js-scroll-info.css-right
+                    p Lock scroll to bottom
+                      input.js-scroll-lock.js-always-works(type="checkbox")
+
+        .js-listener-templates
+          li.js-listener-tab-template.js-listener-tab.css-listener-tab
+            a.js-tab.js-always-works
+            span.js-close-listener-tab.css-close-tab x
+          .js-listener-window-template.js-listener-window.css-listener-window
+            div.css-top
+              span.js-connection-info.css-connection-info
+                a.js-close-listener.css-button Close Connection
+                .js-connection-status.css-connection-status Connection Status
+              span.js-logging-info.css-logging-info
+                span.js-logging-options.css-logging-options
+                  div.js-log-display(variable="separateFiles")
+                    p Save packets separately
+                      input.js-log-ctrl(type="checkbox")(variable="separateFiles")
+                  div.js-log-display(variable="includeHeaders")
+                    p Save HTTP headers
+                      input.js-log-ctrl(type="checkbox")(variable="includeHeaders")
+                span.js-log-display(variable="logData")
+                  a.js-log-ctrl.css-button.css-log(variable="logData")
+            .js-listener-stream.css-stream
+            div.css-bottom
+              span.css-left
+                a.js-clear-stream.js-always-works.css-button Clear
+              span.js-scroll-info.css-right
+                p Lock scroll to bottom
+                  input.js-scroll-lock.js-always-works(type="checkbox")
+            //- the li is just to make the listener template more like the protocol
+            //- template so we can use the same directive
+            li.css-hidden
+
+        .js-stream-templates
+          span.js-message-template
+            .css-streamTime
             span
-            code.highlight-me
-        span.js-tab-template
-          li.js-ui-tab(data-protocol='')
-            a(href='')
-            span.js-close-tab.css-close-tab x
-        div
+            br
+          span.js-code-template
+            .css-streamTime
+            pre.js-always-works
+              span
+              code.highlight-me
 
-    script(src='./vendor/highlight.pack.js', type='text/javascript')
+    //- script(src='./vendor/highlight.pack.js', type='text/javascript')
     script(src='pakmanaged.js', type='text/javascript')
-
-//
-  span.js-tab-container-template
-        .js-ui-tab-view.css-ui-tab-view.js-all.css-inactive(data-name='')
-          span.js-top-template
-            .css-log-options
-              input.js-include-headers(type="checkbox")
-              p Save headers
-            .css-listen-form
-              span.js-port-num.css-port-num(data-protocol='')(type='text')
-            .css-connection-info
-              .css-connection-status.js-http-connection-status.off Connection Status
-            .css-top.right
-              p Save each packet separately
-              input.js-http-multifile(type="checkbox")(checked="true")
-              a.css-button.js-log.css-log(data-protocol='')
-            .js-http-stream.js-all-stream.css-stream
-              span.js-allstream-error
-          span.js-bottom-template
-            .css-left.css-bottom
-              a.css-button.css-closeSocket.js-closeSocket(data-protocol='') Close Connection
-            .css-center.css-bottom
-              a.css-button.js-clear(data-protocol='') Clear
-            .css-right.css-bottom
-              p Lock scroll to bottom
-              input.js-scroll(type="checkbox")(checked="true")(data-protocol='')
