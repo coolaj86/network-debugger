@@ -49,7 +49,7 @@
   }
 
   function preventDefault(event) {
-    // the check box changes the checked attribute immediately, so which
+    // the check box changes the checked attribute immediately, so switch
     // it back to what it was before so we can handle the event our way
     $(event.target).attr('checked', !$(event.target).attr('checked'));
     event.preventDefault();
@@ -72,6 +72,7 @@
     newElement = listenerWindowTemplate(opts);
     newElement = $(newElement).removeClass('js-listener-window-template');
     $(newElement).find('.js-logging-options').find('input[type="checkbox"]').on('click', preventDefault);
+    $(newElement).find('.js-scroll-lock').attr('checked', true);
     $('.js-listener-container[data-protocol='+protocol+']').append(newElement);
   }
 
