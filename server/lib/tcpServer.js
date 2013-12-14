@@ -3,6 +3,7 @@
 
   var net = require('net')
     , path = require('path')
+    , isUtf8 = require('is-utf8')
     , file = require('./file')
     , listeners = {}
     , browserSocket
@@ -71,7 +72,8 @@
     }
 
     function handleConnection(socket) {
-      var socketData = ''
+      var data = []
+        , dataSize = 0
         ;
 
       connections.push(socket);
@@ -83,12 +85,15 @@
         , count: connections.length
       });
 
-      socket.on('data', function (data) {
-        socketData += data.toString();
+      socket.on('data', function (chunk) {
+        dataSize += chunk.length;
+        data.push(chunk);
       });
 
       socket.on('close', function () {
         var index = connections.indexOf(socket)
+          , mergedData = Buffer.concat(data, dataSize)
+          , strData
           ;
 
         if (index < 0) {
@@ -105,18 +110,25 @@
           , count: connections.length
         });
 
+        if (isUtf8(mergedData)) {
+          strData = mergedData.toString('utf8');
+        }
+        else {
+          strData = mergedData.toString('base64');
+        }
+
         browserSocket.emit('listenerData', {
             protocol: 'tcp'
           , port: port
-          , body: socketData
+          , body: strData
         });
 
         if (logSettings.logData) {
           if (logSettings.separateFiles) {
-            file.writeData(logSettings.logPath, socketData);
+            file.writeData(logSettings.logPath, mergedData);
           }
           else {
-            finishedData.push(socketData);
+            finishedData.push(mergedData);
           }
         }
       });

@@ -3,6 +3,7 @@
 
   var dgram = require('dgram')
     , path = require('path')
+    , isUtf8 = require('is-utf8')
     , file = require('./file')
     , listeners = {}
     , browserSocket
@@ -56,22 +57,28 @@
 
     server.on('error', callbackWrapper);
 
-    server.on('message', function (msg, rinfo) {
-      var message = msg.toString('utf8')
+    server.on('message', function (msg) {
+      var strMsg
         ;
+
+      if (isUtf8(msg)) {
+        strMsg = msg.toString('utf8');
+      } else {
+        strMsg = msg.toString('base64');
+      }
 
       browserSocket.emit('listenerData', {
           protocol: 'udp'
         , port: port
-        , body: message
+        , body: strMsg
       });
 
       if (logSettings.logData) {
         if (logSettings.separateFiles) {
-          file.writeData(logSettings.logPath, message);
+          file.writeData(logSettings.logPath, msg);
         }
         else {
-          finishedData.push(message);
+          finishedData.push(msg);
         }
       }
     });

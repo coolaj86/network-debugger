@@ -3,6 +3,7 @@
 
   var http = require('http')
     , path = require('path')
+    , isUtf8 = require('is-utf8')
     , file = require('./file')
     , listeners = {}
     , browserSocket
@@ -115,32 +116,44 @@
     });
 
     server.on('request', function (request, response) {
-      var body = '';
+      var body = []
+        , bodySize = 0
+        ;
 
       request.on('data', function (chunk) {
-        body += chunk.toString('utf8');
+        bodySize += chunk.length;
+        body.push(chunk);
       });
 
       request.on('end', function () {
         var headers = restringifyHeaders(request)
+          , mergedBody = Buffer.concat(body, bodySize)
+          , strBody
           , loggableData
           ;
 
         response.end('Hello from Netbug');
 
+        if (isUtf8(mergedBody)) {
+          strBody = mergedBody.toString('utf8');
+        }
+        else {
+          strBody = mergedBody.toString('base64');
+        }
+
         browserSocket.emit('listenerData', {
             protocol: 'http'
           , port: port
           , headers: headers
-          , body: body
+          , body: strBody
         });
 
         if (logSettings.logData) {
           if (logSettings.includeHeaders) {
-            loggableData = headers + body;
+            loggableData = Buffer.concat([new Buffer(headers), mergedBody], headers.length + bodySize);
           }
           else {
-            loggableData = body;
+            loggableData = mergedBody;
           }
 
           if (logSettings.separateFiles) {

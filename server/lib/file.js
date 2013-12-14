@@ -49,7 +49,7 @@
     }
 
     filename = path.resolve(dirname, getTimeString() + ext);
-    fs.writeFile(filename, data , function (err) {
+    fs.writeFile(filename, data, function (err) {
       if (err) {
         throw err;
       }
