@@ -95,7 +95,10 @@
         ;
       subSelector += '[data-protocol="'+$(stream).attr('data-protocol')+'"]';
       subSelector += '[listener-port="'+$(stream).attr('listener-port')+'"]';
-      while (stream.scrollHeight > 3000 && $(stream).children().length > 5) {
+      // while I had originally wanted to make the limit based on size of elements as
+      // well, I haven't found a good way to determine size for inactive tabs. (Failing
+      // to limit inactive tabs will crash the browser after a while.)
+      while ($(stream).children().length > 15) {
         $(stream).children().first().remove();
       }
       if ($('.js-scroll-lock'+subSelector).attr('checked') && stream.scrollHeight !== 0) {
