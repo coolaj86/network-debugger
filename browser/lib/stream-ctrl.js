@@ -21,8 +21,15 @@
     });
   }
 
+  function makeSafe(content) {
+    if (typeof content !== 'string') {
+      content = 'invalid input to "makeSafe": ' + content;
+    }
+    return content.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
   function syntaxHighlight(json) {
-    json = json.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    json = makeSafe(json);
     return json.replace(/("(\\u[a-zA-Z0-9]{4}|\\[^u]|[^\\"])*"(\s*:)?|\b(true|false|null)\b|-?\d+(?:\.\d*)?(?:[eE][+\-]?\d+)?)/g
     , function (match) {
         var cls = 'number';
@@ -43,7 +50,6 @@
 
   function processPacket(options) {
     var data = {code: ''}
-      , xml
       , xml_pp
       , json_pp
       ;
@@ -58,23 +64,25 @@
       return data;
     }
 
+    //if json
+    if (options.body.charAt(0) === '{') {
+      try {
+        json_pp = JSON.parse(options.body);
+        json_pp = JSON.stringify(json_pp, null, '  ');
+        json_pp = syntaxHighlight(json_pp);
+        data.code += json_pp;
+        return data;
+      }
+      catch (e) {}
+    }
+
     //if xml
     if (options.body.substring(0,3) === '<?x') {
       xml_pp = pd.xml(options.body);
-      xml = xml_pp.replace(/&/g, '&amp;')
-                  .replace(/</g, '&lt;')
-                  .replace(/>/g, '&gt;');
-      data.xml = xml;
-    }
-    //if json
-    else if (options.body.charAt(0) === '{') {
-      json_pp = JSON.parse(options.body);
-      json_pp = JSON.stringify(json_pp, null, '  ');
-      json_pp = syntaxHighlight(json_pp);
-      data.code += json_pp;
+      data.code = makeSafe(xml_pp);
     }
     else {
-      data.code += options.body;
+      data.code = makeSafe(options.body);
     }
     return data;
   }
