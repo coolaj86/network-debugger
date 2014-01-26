@@ -1,12 +1,18 @@
 (function () {
   "use strict";
-  var $ = require('ender')
+  var bonzo = require('bonzo')
+    , qwery = require('qwery')
+    , bean = require('bean')
     , pure = require('pure').$p
     , protocolTabTemplate
     , protocolWindowTemplate
     , listenerTabTemplate
     , listenerWindowTemplate
     ;
+
+  function $() {
+    return bonzo(qwery.apply(null, arguments));
+  }
 
   function compileTemplates() {
     var directive = {}
@@ -37,14 +43,13 @@
 
     opts.protocol = protocol;
     opts.display  = protocol.toUpperCase();
-
-    newElement = protocolTabTemplate(opts);
-    newElement = $(newElement).removeClass('js-protocol-tab-template');
+    newElement = bonzo.create(protocolTabTemplate(opts));
+    bonzo(newElement).removeClass('js-protocol-tab-template');
     $('.js-protocol-tab-bar').append(newElement);
 
     opts.portNum = 'default';
-    newElement = protocolWindowTemplate(opts);
-    newElement = $(newElement).removeClass('js-protocol-window-template');
+    newElement = bonzo.create(protocolWindowTemplate(opts));
+    bonzo(newElement).removeClass('js-protocol-window-template');
     $('.container').append(newElement);
   }
 
@@ -64,15 +69,17 @@
     opts.portNum  = portNum;
     opts.display  = portNum;
 
-    newElement = listenerTabTemplate(opts);
-    newElement = $(newElement).removeClass('js-listener-tab-template');
+    newElement = bonzo.create(listenerTabTemplate(opts));
+    bonzo(newElement).removeClass('js-listener-tab-template');
     $('.js-listener-tab-bar[data-protocol='+protocol+']').append(newElement);
     $('.js-listener-tab-bar[data-protocol='+protocol+']').removeClass('css-hidden');
 
-    newElement = listenerWindowTemplate(opts);
-    newElement = $(newElement).removeClass('js-listener-window-template');
-    $(newElement).find('.js-logging-options').find('input[type="checkbox"]').on('click', preventDefault);
-    $(newElement).find('.js-scroll-lock').attr('checked', true);
+    newElement = bonzo.create(listenerWindowTemplate(opts));
+    bonzo(newElement).removeClass('js-listener-window-template');
+    qwery('.js-logging-options input[type="checkbox"]', newElement).forEach(function (box) {
+      bean.on(box, 'click', preventDefault);
+    });
+    $('.js-scroll-lock', newElement).attr('checked', true);
     $('.js-listener-container[data-protocol='+protocol+']').append(newElement);
   }
 

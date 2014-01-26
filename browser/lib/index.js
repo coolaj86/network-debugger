@@ -1,6 +1,9 @@
 (function () {
   "use strict";
-  var $ = require('ender')
+  var domready = require('domready')
+    , qwery = require('qwery')
+    , bonzo = require('bonzo')
+    , bean = require('bean')
     , url = require('url')
     , window = require('window')
     , location = window.location
@@ -10,12 +13,18 @@
     , serverCtrl = require('./server-ctrl')
     , streamCtrl = require('./stream-ctrl')
     , socketConnected = false
+    , container
     ;
 
+  function $(selector) {
+    return bonzo(qwery(selector));
+  }
+
+  bean.setSelectorEngine(qwery);
   //EVENT LISTENERS ALL
   //window sizing
-  $(window).on('resize', function () {
-    var current = $('body').height()
+  bean.on(window, 'resize', function () {
+    var current = $('body').dim().height
       , target = window.innerHeight - 50
       , streamSize = 0
       ;
@@ -23,22 +32,23 @@
     // the streams should all be the same height, but it case
     // they aren't find the biggest, assume they are all the same,
     // and then make them all the same.
-    $('.css-stream').forEach(function (stream) {
-      if ($(stream).height() > streamSize) {
-        streamSize = $(stream).height();
+    qwery('.css-stream').forEach(function (stream) {
+      if (bonzo(stream).dim().height > streamSize) {
+        streamSize = bonzo(stream).dim().height;
       }
     });
 
-    $('.css-stream').height(streamSize + (target-current));
+    $('.css-stream').css('height', streamSize + (target-current));
   });
 
   // tab navigation
-  $('body').delegate('.js-tab', 'click', function () {
+  bean.on(qwery('body')[0], 'click', '.js-tab', function () {
     tabCtrl.displayTab($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
 
+  container = qwery('.container')[0];
   // event interceptor
-  $('.container').on('click keypress', function (event) {
+  bean.on(container, 'click keypress', function (event) {
     if ($(event.target).hasClass('js-always-works')) {
       return;
     }
@@ -49,20 +59,20 @@
   });
 
   // listener control
-  $('.container').delegate('.js-open-listener', 'click', function () {
+  bean.on(container, 'click', '.js-open-listener', function () {
     var protocol = $(this).attr('data-protocol')
       , port = Number($('.js-portNum[data-protocol="'+protocol+'"]').val())
       ;
 
     serverCtrl.openListener(protocol, port);
   });
-  $('.container').delegate('.js-portNum', 'keypress', function (e) {
+  bean.on(container, 'keypress', '.js-portNum', function (e) {
     if (e.keyCode === 13) {
       serverCtrl.openListener($(this).attr('data-protocol'), Number($(this).val()));
     }
   });
 
-  $('.container').delegate('.js-log-ctrl', 'click', function () {
+  bean.on(container, 'click', '.js-log-ctrl', function () {
     var settings = {}
       ;
 
@@ -70,24 +80,24 @@
     serverCtrl.setListenerLogging($(this).attr('data-protocol'), $(this).attr('listener-port'), settings);
   });
 
-  $('.container').delegate('.js-close-listener', 'click', function () {
+  bean.on(container, 'click', '.js-close-listener', function () {
     serverCtrl.closeListener($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
-  $('.container').delegate('.js-reopen-listener', 'click', function () {
+  bean.on(container, 'click', '.js-reopen-listener', function () {
     serverCtrl.openListener($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
-  $('.container').delegate('.js-close-listener-tab', 'click', function () {
+  bean.on(container, 'click', '.js-close-listener-tab', function () {
     tabCtrl.closeListenerTab($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
 
   // stream visualization control
-  $('.container').delegate('.js-listener-stream pre', 'click', function () {
+  bean.on(container, 'click', '.js-listener-stream pre', function () {
     $(this).toggleClass('css-hl-block');
   });
-  $('.container').delegate('.js-scroll-lock', 'change', function () {
+  bean.on(container, 'change', '.js-scroll-lock', function () {
     streamCtrl.scrollLock($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
-  $('.container').delegate('.js-clear-stream', 'click', function () {
+  bean.on(container, 'click', '.js-clear-stream', function () {
     streamCtrl.clearStream($(this).attr('data-protocol'), $(this).attr('listener-port'));
   });
 
@@ -229,7 +239,7 @@
     }
   }
 
-  $.domReady(function () {
+  domready(function () {
     pure.compileTemplates();
     serverCtrl.getVersion(function (resp) {
       if (resp) {

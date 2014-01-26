@@ -1,12 +1,18 @@
 (function () {
   "use strict";
 
-  var $ = require('ender')
+  var domready = require('domready')
+    , qwery = require('qwery')
+    , bonzo = require('bonzo')
     , pd = require('pretty-data').pd
     , pure = require('pure').$p
     , messageTemplate
     , codeTemplate
     ;
+
+  function $(selector) {
+    return bonzo(qwery(selector));
+  }
 
   function compileTemplates() {
     messageTemplate = pure('.js-message-template').compile({
@@ -98,17 +104,26 @@
       selector += '[listener-port="'+port+'"]';
     }
 
-    $('.js-listener-stream'+selector).forEach(function (stream) {
+    qwery('.js-listener-stream'+selector).forEach(function (stream) {
       var subSelector = ''
+        , children = []
+        , curChild
         ;
-      subSelector += '[data-protocol="'+$(stream).attr('data-protocol')+'"]';
-      subSelector += '[listener-port="'+$(stream).attr('listener-port')+'"]';
+
       // while I had originally wanted to make the limit based on size of elements as
       // well, I haven't found a good way to determine size for inactive tabs. (Failing
       // to limit inactive tabs will crash the browser after a while.)
-      while ($(stream).children().length > 15) {
-        $(stream).children().first().remove();
+      curChild = bonzo.firstChild(stream);
+      while (curChild) {
+        children.push(curChild);
+        curChild = curChild.nextSibling;
       }
+      while (children.length > 15) {
+        bonzo(children.shift()).remove();
+      }
+
+      subSelector += '[data-protocol="'+bonzo(stream).attr('data-protocol')+'"]';
+      subSelector += '[listener-port="'+bonzo(stream).attr('listener-port')+'"]';
       if ($('.js-scroll-lock'+subSelector).attr('checked') && stream.scrollHeight !== 0) {
         stream.scrollTop = stream.scrollHeight;
       }
@@ -171,7 +186,7 @@
     $('.js-listener-stream'+selector).html('');
   }
 
-  $.domReady(compileTemplates);
+  domready(compileTemplates);
 
   module.exports.injectMessage = injectMessage;
   module.exports.injectCode    = injectCode;

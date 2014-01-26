@@ -1,7 +1,9 @@
 (function () {
   "use strict";
 
-  var $ = require('ender')
+  var qwery = require('qwery')
+    , bonzo = require('bonzo')
+    , bean = require('bean')
     , window = require('window')
     , pure = require('./pure-inject')
     , serverCtrl = require('./server-ctrl')
@@ -21,6 +23,10 @@
         }
       ]
     ;
+
+  function $(selector) {
+    return bonzo(qwery(selector));
+  }
 
   function displayTab() {
     var args = Array.prototype.slice.call(arguments)
@@ -63,7 +69,7 @@
     });
 
     window.location.hash = newHash;
-    $(window).trigger('resize');
+    bean.fire(window, 'resize');
   }
 
   function addProtocolTab(protocol) {
@@ -95,7 +101,7 @@
       $('.js-listener-window' + selector).addClass('css-active');
       $('.js-listener-window' + selector).removeClass('css-inactive');
 
-      buttonEl = $('.js-listener-window' + selector).find('.js-reopen-listener');
+      buttonEl = $('.js-listener-window' + selector + ' .js-reopen-listener');
       buttonEl.removeClass('js-reopen-listener');
       buttonEl.addClass('js-close-listener');
       buttonEl.html('Close Listener');
@@ -106,7 +112,7 @@
       $('.js-listener-window' + selector).addClass('css-inactive');
       $('.js-listener-window' + selector).removeClass('css-active');
 
-      buttonEl = $('.js-listener-window' + selector).find('.js-close-listener');
+      buttonEl = $('.js-listener-window' + selector + ' .js-close-listener');
       buttonEl.removeClass('js-close-listener');
       buttonEl.addClass('js-reopen-listener');
       buttonEl.html('Reopen Listener');
@@ -121,18 +127,17 @@
     selector += '[data-protocol="' + protocol + '"]';
     selector += '[listener-port="' + port + '"]';
 
-    $(selector).find('.js-log-display').hide();
+    $(selector + ' .js-log-display').hide();
 
     Object.keys(logSettings).forEach(function (key) {
-      $(selector).find('.js-log-display[variable="'+key+'"]').show();
-      $(selector).find('.js-log-ctrl[variable="'+key+'"]').attr('checked', !!logSettings[key]);
-      $(selector).find('.js-log-ctrl[variable="'+key+'"]').attr('option-active', !!logSettings[key]);
+      $(selector + ' .js-log-display[variable="'+key+'"]').show();
+      $(selector + ' .js-log-ctrl[variable="'+key+'"]').attr('checked', !!logSettings[key]);
+      $(selector + ' .js-log-ctrl[variable="'+key+'"]').attr('option-active', !!logSettings[key]);
     });
   }
 
   function addListenerTab(protocol, port, logSettings) {
     var options = {}
-      , count
       , selector
       ;
 
@@ -140,12 +145,10 @@
     selector += '[data-protocol="' + protocol + '"]';
     selector += '[listener-port="' + port + '"]';
 
-    count = $(selector).length;
-    if (count === 0) {
+    if (qwery(selector).length === 0) {
       pure.injectListenerTab(protocol, port);
-      count = $(selector).length;
     }
-    if (count !== 1) {
+    if (qwery(selector).length !== 1) {
       // notify user
     }
 
@@ -166,6 +169,8 @@
 
   function closeListenerTab(protocol, port) {
     var selector = '[data-protocol="' + protocol + '"][listener-port="' + port + '"]'
+      , tabBar
+      , child
       ;
 
     if ($('.js-listener-window'+selector).hasClass('css-active')) {
@@ -180,8 +185,18 @@
     $('.js-listener-window'+selector).remove();
 
     // if only the default tab is left then hide the tab bar again
-    if ($('.js-listener-tab-bar[data-protocol='+protocol+']').children().length <= 1){
-      $('.js-listener-tab-bar[data-protocol='+protocol+']').addClass('css-hidden');
+    tabBar = qwery('.js-listener-tab-bar[data-protocol='+protocol+']');
+    if (tabBar.length !== 1) {
+      console.error('multiple tab bars for', protocol);
+      return;
+    }
+    child = bonzo.firstChild(tabBar[0]);
+    if (!child) {
+      console.log(protocol, 'tab bar has no children');
+      return;
+    }
+    if (!child.nextSibling) {
+      bonzo(tabBar).addClass('css-hidden');
     }
   }
 
