@@ -25,10 +25,10 @@
           }
         }
       },
-      'pakmanager': {
-        browser: {
+      'browserify': {
+        main: {
           files: {
-            'public/pakmanaged.js': 'browser/'
+            'public/main.js': 'browser/lib/index.js'
           }
         }
       },
@@ -36,7 +36,7 @@
       'uglify': {
         main: {
           files: {
-            'public/pakmanaged.js': 'public/pakmanaged.js'
+            'public/main.js': 'public/main.js'
           }
         }
       },
@@ -62,8 +62,8 @@
           tasks: ['jade']
         },
         scripts: {
-          files: ['browser/**/*.js', 'browser/package.json'],
-          tasks: ['pakmanager']
+          files: ['browser/**/*.js'],
+          tasks: ['browserify']
         }
       }
     });
@@ -71,14 +71,14 @@
     grunt.loadNpmTasks('grunt-contrib-copy');
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-jade');
-    grunt.loadTasks('grunt-tasks/');
+    grunt.loadNpmTasks('grunt-browserify');
 
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-uglify');
 
     grunt.loadNpmTasks('grunt-contrib-watch');
 
-    grunt.registerTask('basic',    ['copy', 'jade', 'less', 'pakmanager']);
+    grunt.registerTask('basic',    ['copy', 'jade', 'less', 'browserify']);
     grunt.registerTask('compress', ['uglify', 'cssmin']);
     grunt.registerTask('build',    ['basic', 'compress']);
     grunt.registerTask('develop',  ['basic', 'watch']);

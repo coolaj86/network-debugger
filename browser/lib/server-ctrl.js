@@ -2,7 +2,6 @@
   "use strict";
 
   var reqwest = require('reqwest')
-    , location = require('window').location
     , streamCtrl = require('./stream-ctrl')
     ;
 
@@ -73,7 +72,7 @@
     }
 
     reqwest({
-        url: 'http://'+location.host+'/'+url
+        url: url
       , type: 'json'
       , method: 'get'
       , error: error
@@ -82,11 +81,11 @@
   }
 
   function getVersion(cb) {
-    getResource(cb, 'version', 'acquire version');
+    getResource(cb, '/version', 'acquire version');
   }
 
   function getAllListeners(cb) {
-    getResource(cb, 'onPageLoad', 'acquire active listeners');
+    getResource(cb, '/onPageLoad', 'acquire active listeners');
   }
 
   function openListener(protocol, port) {
@@ -103,7 +102,7 @@
     }
 
     reqwest({
-        url: 'http://'+location.host+'/listeners/'+protocol+'/'+port
+        url: '/listeners/'+protocol+'/'+port
       , type: 'json'
       , method: 'post'
       , error: handlers.error
@@ -117,7 +116,7 @@
       ;
 
     reqwest({
-        url: 'http://'+location.host+'/listeners/'+protocol+'/'+port
+        url: '/listeners/'+protocol+'/'+port
       , type: 'json'
       , method: 'put'
       , contentType: 'application/json'
@@ -133,7 +132,7 @@
       ;
 
     reqwest({
-        url: 'http://'+location.host+'/listeners/'+protocol+'/'+port
+        url: '/listeners/'+protocol+'/'+port
       , type: 'json'
       , method: 'delete'
       , error: handlers.error

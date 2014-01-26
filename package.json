@@ -28,6 +28,7 @@
 
     "argparse": "0.1.x",
     "colors": "0.6.x",
+    "socket.io-client": "0.9.x",
     "socket.io": "0.9.x",
     "is-utf8": ">=0.2.0",
     "mkdirp": "0.3.x",
@@ -40,7 +41,16 @@
     "grunt-contrib-jade": "0.5.x",
     "grunt-contrib-watch": "0.4.x",
     "grunt-contrib-cssmin": "0.6.x",
-    "grunt-contrib-uglify": "0.2.x"
+    "grunt-contrib-uglify": "0.2.x",
+    "grunt-browserify": "1.x",
+
+    "domready": "0.2.x",
+    "bonzo": "1.x",
+    "qwery": "3.x",
+    "bean": "1.x",
+    "reqwest": "1.x",
+    "pure": "2.x",
+    "pretty-data": "0.30.x"
   },
   "optionalDependencies": {},
   "engines": {

@@ -1,10 +1,10 @@
+/* jshint browser: true */
 (function () {
   "use strict";
 
   var qwery = require('qwery')
     , bonzo = require('bonzo')
     , bean = require('bean')
-    , window = require('window')
     , pure = require('./pure-inject')
     , serverCtrl = require('./server-ctrl')
     , streamCtrl = require('./stream-ctrl')

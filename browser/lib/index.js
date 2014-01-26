@@ -1,3 +1,4 @@
+/* jshint browser: true */
 (function () {
   "use strict";
   var domready = require('domready')
@@ -5,9 +6,7 @@
     , bonzo = require('bonzo')
     , bean = require('bean')
     , url = require('url')
-    , window = require('window')
-    , location = window.location
-    , io = require('socket.io-browser')
+    , io = require('socket.io-client')
     , pure = require('./pure-inject')
     , tabCtrl = require('./tab-ctrl')
     , serverCtrl = require('./server-ctrl')
