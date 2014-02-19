@@ -2,6 +2,7 @@
 @strongYellow: #FFC925;
 @lightBackground: #8B907F;
 @lightGray: #D1D1D1;
+
 body{
   font-family: "Play";
   background-color: #23241F;
@@ -27,35 +28,25 @@ body{
    color-stop(0%,#4f4f4f), color-stop(20%,#3a3a3a), color-stop(50%,#2c2c2c),
    color-stop(52%,#1d1d1d), color-stop(100%,#262626), color-stop(100%,#2d2d2d),
    color-stop(100%,#1d1d1d));
+
   border-radius: 10px;
-  height: 27px;
-  padding: 6px 15px;
   box-shadow: inset 0px 0px 1px 1px #111;
   margin-bottom: 26px;
   margin-top: 12px;
   .css-title{
-    float: left;
     color: @strongYellow;
     text-shadow: 0px 1px 0px #444, -1px -1px 0px #111;
     font-size: 24px;
   }
   .css-version{
-    float: left;
     color: white;
     font-size: 12px;
-    position: relative;
-    top: 11px;
-    left: 8px;
+    padding: 0px 5px;
   }
-  img{
-    float: left;
-    margin: 9px 20px 0px 15px;
+  .css-logo {
+    padding-left: 15px;
+    margin: -4px 10px;
     height: 35px;
-  }
-  .css-logo{
-    position: relative;
-    top: -14px;
-    left: -10px;
   }
   &:after{
     content: " ";
@@ -65,25 +56,21 @@ body{
 }
 
 .css-tab-menu{
-  -webkit-margin-before: 0;
-  -webkit-margin-after: 0px;
-  -webkit-padding-start: 0px;
-  position: relative;
   float: right;
-  left: 15px;
-  top: -5px;
   box-shadow: -1px 0px 6px 0px #111;
+  margin: 0;
+  padding: 0;
   li{
-    float: left;
+    display: inline-block;
     list-style-type: none;
-    position: relative;
+    width: 5em;
+    text-align: center;
     box-shadow: inset -6px 0px 6px -5px #111, inset 6px 3px 2px -5px #555;
     background-color:transparent;
     border-radius: 0px;
-    padding: 0px;
-    margin-left: 0px;
+    margin: 0px;
     a{
-      padding: 9px 38px;
+      padding: 7px 0px;
       display: block;
       text-shadow: 0px 1px 0px #444, 0px -1px 0px #111;
       color: white;
@@ -92,7 +79,7 @@ body{
     &.tab-selected{
       background: -webkit-radial-gradient(center, ellipse cover, #4c4c4c 0%,#262626 0%,#141414 100%,#2d2d2d 100%,#1d1d1d 100%);
       a{
-        color: #FFC925;
+        color: @strongYellow;
       }
     }
     &:last-child{
