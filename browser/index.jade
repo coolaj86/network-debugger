@@ -29,17 +29,16 @@ html(lang='en')
             .js-listener-container
               .js-listener-window.css-listener-window
                 div.css-top
-                  span.js-listen-form.css-listen-form
+                  label.js-listen-form.css-listen-form
                     a.js-open-listener.css-button Listen
                     input.js-portNum.css-input-port(type='text')
-                    p Enter the port on which to listen
+                    | Enter the port on which to listen
                 .js-listener-stream.css-stream
                 div.css-bottom
                   span.css-left
                     a.js-clear-stream.js-always-works.css-button Clear
-                  span.js-scroll-info.css-right
-                    p Lock scroll to bottom
-                      input.js-scroll-lock.js-always-works(type="checkbox")
+                  label.js-scroll-info.css-right Lock scroll to bottom
+                    input.js-scroll-lock.js-always-works(type="checkbox")
 
         .js-listener-templates
           li.js-listener-tab-template.js-listener-tab.css-listener-tab
@@ -53,10 +52,10 @@ html(lang='en')
               span.js-logging-info.css-logging-info
                 span.js-logging-options.css-logging-options
                   div.js-log-display(variable="separateFiles")
-                    p Save packets separately
+                    label Save packets separately
                       input.js-log-ctrl(type="checkbox")(variable="separateFiles")
                   div.js-log-display(variable="includeHeaders")
-                    p Save HTTP headers
+                    label Save HTTP headers
                       input.js-log-ctrl(type="checkbox")(variable="includeHeaders")
                 span.js-log-display(variable="logData")
                   a.js-log-ctrl.css-button.css-log(variable="logData")
@@ -64,9 +63,8 @@ html(lang='en')
             div.css-bottom
               span.css-left
                 a.js-clear-stream.js-always-works.css-button Clear
-              span.js-scroll-info.css-right
-                p Lock scroll to bottom
-                  input.js-scroll-lock.js-always-works(type="checkbox")
+              label.js-scroll-info.css-right Lock scroll to bottom
+                input.js-scroll-lock.js-always-works(type="checkbox")
             //- the li is just to make the listener template more like the protocol
             //- template so we can use the same directive
             li.css-hidden
