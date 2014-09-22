@@ -1,3 +1,10 @@
+--v2.1.2 September 2013
+fixed HTML injection problem
+fixed handling of non-UTF8 data
+fixed browser crash with multiple active netbug tabs
+made "lock scroll to bottom" checked by default
+modified styling of the web page
+
 --v2.1.1 May 2013
 major internal UI rework
 more fluid tab navigation
