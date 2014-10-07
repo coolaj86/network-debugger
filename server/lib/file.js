@@ -29,14 +29,17 @@
       , ext = '.txt'
       ;
 
-    if (data.indexOf("<kml") !== -1) {
+    if (data.slice(0,4).toString('utf8') === '<kml') {
       ext = '.kml';
     }
-    else if (data.indexOf("<html") !== -1) {
+    else if (data.slice(0,5).toString('utf8') === "<html") {
       ext = '.html';
     }
-    else if (data.indexOf("<xml") !== -1) {
+    else if (data.slice(0,4).toString('utf8') === "<xml") {
       ext = '.xml';
+    }
+    else if (data[0] === 0x89 && data.toString('utf8', 1, 4) === 'PNG') {
+      ext = '.png';
     }
     else {
       try {
