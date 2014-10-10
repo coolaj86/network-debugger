@@ -2,7 +2,7 @@
   "author": "Seth Gibelyou <sethg@spotterrf.com>",
   "name": "netbug",
   "description": "Unified interface for creating listeners for various network protocols",
-  "version": "2.1.2",
+  "version": "2.1.3",
   "repository": {
     "type": "git",
     "url": "git://github.com/SpotterRF/network-debugger.git"
